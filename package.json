@@ -1,0 +1,46 @@
+{
+  "name": "pat-bot",
+  "version": "0.0.1",
+  "description": "A silly discord bot.",
+  "license": "MIT",
+  "repository": "https://github.com/ChadLefort/pat-bot.git",
+  "author": "Chad Lefort",
+  "keywords": [
+    "discord", "bot"
+  ],
+  "files": [
+    "lib"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "dependencies": {
+    "@types/dotenv": "^2.0.18",
+    "@types/glob": "^5.0.30",
+    "@types/lodash": "^4.14.36",
+    "@types/node": "6.0.31",
+    "discord.js": "^9.3.0",
+    "dotenv": "^2.0.0",
+    "glob": "^7.1.0",
+    "lodash": "^4.16.2"
+  },
+  "devDependencies": {
+    "@types/chai": "3.4.30",
+    "@types/mocha": "2.2.29",
+    "chai": "3.5.0",
+    "del": "^2.2.1",
+    "dotbin": "^1.0",
+    "gulp": "^3.9.0",
+    "gulp-help": "^1.6.0",
+    "gulp-mocha": "^3.0.0",
+    "gulp-tslint": "^6.0",
+    "ts-node": "^1.2.2",
+    "tslint": "3.14.0-dev.1",
+    "typescript": "2.0.0"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}
