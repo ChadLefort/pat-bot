@@ -5,7 +5,8 @@ var mocha = require('gulp-mocha');
 var gulp = require('gulp-help')(gulp);
 var path = require('path');
 var del = require('del');
-var tslintCustom = require('tslint'); // for tslint-next https://github.com/panuhorsmalahti/gulp-tslint#specifying-the-tslint-module
+var tslintCustom = require('tslint');
+var nodemon = require('gulp-nodemon');
 require('dotbin');
 
 var tsFilesGlob = (function (c) {
@@ -51,6 +52,20 @@ gulp.task('test', 'Runs the Jasmine test specs', ['build'], function () {
     }));
 });
 
-gulp.task('watch', 'Watches ts source files and runs build on change', function () {
-  gulp.watch(tsFilesGlob, ['build']);
+gulp.task('develop', 'Runs nodemon and watches the src directory', function () {
+  var stream = nodemon({
+    ext: 'ts',
+    ignore: ['node_modules'],
+    watch: [tsFilesGlob],
+    tasks: ['build']
+  });
+
+  stream
+    .on('restart', function () {
+      console.log('restarted!');
+    })
+    .on('crash', function () {
+      console.error('Application has crashed!\n');
+      stream.emit('restart', 10)
+    });
 });

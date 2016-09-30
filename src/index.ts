@@ -1,8 +1,7 @@
-import { PatBot } from './pat-bot';
-import { config } from 'dotenv';
+import Config from './models/config';
+import PatBot from './models/pat-bot';
 
-config();
+let config = new Config();
+let patBot = new PatBot(process.env.DISCORD_TOKEN, config.logger());
 
-let patBot = new PatBot(process.env.DISCORD_TOKEN);
-
-patBot.activate();
+patBot.execute();

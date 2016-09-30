@@ -2,7 +2,7 @@
   "compilerOptions": {
     "typeRoots": [
       "node_modules/@types",
-      "./typings"
+      "typings"
     ],
     "target": "es6",
     "declaration": true,
@@ -10,8 +10,10 @@
     "moduleResolution": "node",
     "noImplicitAny": true,
     "outDir": "./lib",
+    "rootDir": "./src",
     "preserveConstEnums": true,
-    "removeComments": true
+    "removeComments": true,
+    "sourceMap": true
   },
   "include": [
     "src/**/*"

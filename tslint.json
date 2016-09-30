@@ -24,7 +24,7 @@
       true,
       "single"
     ],
-    "semicolon": true,
+    "semicolon": [true],
     "triple-equals": [
       true,
       "allow-null-check"
@@ -51,6 +51,8 @@
       "check-separator",
       "check-type"
     ],
-    "no-console": false
+    "no-console": [false],
+    "max-line-length": [false],
+    "member-ordering": [false]
   }
 }
