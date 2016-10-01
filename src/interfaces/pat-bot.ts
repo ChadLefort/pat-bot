@@ -1,10 +1,11 @@
-import { ICommandInfo } from './commands';
+import { ICommandDetail } from './commands';
 import * as Discord from 'discord.js';
 import * as winston from 'winston';
 
 export interface IImage {
     ext: string;
     fileName: string;
+    folder: string;
 }
 
 export interface ICommandParams {
@@ -12,11 +13,11 @@ export interface ICommandParams {
     msg: Discord.Message;
     logger: winston.LoggerInstance;
     processedCommand: IProssedCommand;
-    commandInfo?: Array<ICommandInfo>;
+    commandDetails?: Array<ICommandDetail>;
     images?: Array<IImage>;
 }
 
 export interface IProssedCommand {
-    command: ICommandInfo;
+    command: string;
     param: string;
 }

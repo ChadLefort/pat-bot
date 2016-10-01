@@ -1,9 +1,10 @@
-import { ICommandParams, IGiphy } from '../../interfaces/index';
+import { ICommandDetail, ICommandParams, IGiphy } from '../../interfaces/index';
 import * as chalk from 'chalk';
 import * as request from 'request-promise';
 
 export class Gif {
     private static instance: Gif;
+    private commandDetails: Array<ICommandDetail>;
 
     public static getInstance(): Gif {
         return this.instance || (this.instance = new Gif());
@@ -27,5 +28,15 @@ export class Gif {
                 params.msg.channel.sendFile(results.data.image_original_url);
             })
             .catch(error => params.logger.error(chalk.red.bold(error)));
+    }
+
+    public getCommandDetails(): Array<ICommandDetail> {
+        this.commandDetails = [{
+            command: 'gif',
+            description: 'A random gif from giphy based on your search term.',
+            parameters: ['search term'],
+        }];
+
+        return this.commandDetails;
     }
 }

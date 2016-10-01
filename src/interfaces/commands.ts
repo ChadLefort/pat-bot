@@ -1,13 +1,14 @@
 import * as Command from '../models/commands';
 
-export interface ICommandInfo {
-    command: string;
-    param?: string;
-}
-
-export interface ICommands {
+export interface IMainCommands {
     gif: Command.Gif;
     help: Command.Help;
-    meow: Command.Meow;
+    pat: Command.Pat;
     silly: Command.Silly;
+}
+
+export interface ICommandDetail {
+    command: string;
+    parameters?: Array<string>;
+    description?: string;
 }

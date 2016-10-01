@@ -1,29 +1,34 @@
-import * as Interface from '../interfaces/index';
+import * as Interface from '../interfaces';
 import Commands from './commands';
 import * as Promise from 'bluebird';
 import * as chalk from 'chalk';
 import * as Discord from 'discord.js';
 import * as glob from 'glob';
 import * as _ from 'lodash';
+import * as path from 'path';
 import * as winston from 'winston';
 
 export default class PatBot {
     private images: Array<Interface.IImage> = [];
     private client: Discord.Client;
     private prefix: string = '!';
-    private commands: Interface.ICommands;
-    private commandInfo: Array<Interface.ICommandInfo> = [];
+    private mainCommands: Interface.IMainCommands;
+    private commandDetails: Array<Interface.ICommandDetail> = [];
 
     constructor(private token: string, private logger: winston.LoggerInstance) {
         this.client = new Discord.Client();
         this.client.login(this.token);
-        this.commands = Commands.getInstance().commands;
+        this.mainCommands = Commands.getInstance().mainCommands;
     }
 
     public execute(): void {
         this.getImages().then(data => {
             this.images = data;
-            this.commandInfo = Commands.getInstance().getCommandInfo(this.prefix, this.images);
+            this.commandDetails = Commands.getInstance().getCommandDetails(this.prefix, this.images);
+        });
+
+        this.getMainCommands().then(data => {
+            console.log(data);
         });
 
         this.client.on('ready', () => {
@@ -33,6 +38,10 @@ export default class PatBot {
         this.client.on('message', msg => {
             this.handleCommand(msg);
         });
+
+        this.client.on('error', error => {
+            this.logger.error(chalk.red.bold(error.message));
+        });
     }
 
     private handleCommand(msg: Discord.Message): void {
@@ -40,7 +49,8 @@ export default class PatBot {
             return;
         }
 
-        let processedCommand = this.processCommand(msg);
+        msg.content = msg.content.toLowerCase();
+        let processedCommand = this.processCommand(msg.content);
 
         if (!processedCommand.command) {
             return;
@@ -53,46 +63,67 @@ export default class PatBot {
             processedCommand: processedCommand,
         };
 
-        console.log(params.processedCommand);
-
-        switch (processedCommand.command.command) {
+        switch (processedCommand.command) {
             case `${this.prefix}help`:
-                params.commandInfo = this.commandInfo;
-                this.commands.help.execute(params);
+                params.commandDetails = this.commandDetails;
+                this.mainCommands.help.execute(params);
                 break;
             case `${this.prefix}silly`:
                 params.images = this.images;
-                this.commands.silly.execute(params);
+                this.mainCommands.silly.execute(params);
                 break;
             case `${this.prefix}gif`:
-                this.commands.gif.execute(params);
+                this.mainCommands.gif.execute(params);
                 break;
             default:
-                this.commands.meow.execute(params);
+                params.images = this.images;
+                this.mainCommands.pat.execute(params);
         }
     }
 
-    private processCommand(msg: Discord.Message): Interface.IProssedCommand {
-        let message = msg.content.substr(0, msg.content.indexOf(' ') === -1 ? msg.content.length : msg.content.indexOf(' '));
+    private processCommand(msg: string): Interface.IProssedCommand {
+        let message = msg.substr(0, msg.indexOf(' ') === -1 ? msg.length : msg.indexOf(' '));
 
         return {
-            command: _.find(this.commandInfo, { command: message }),
-            param: msg.content.substr(msg.content.indexOf(' ') === -1 ? null : msg.content.indexOf(' ') + 1),
+            command: _.find(this.commandDetails, { command: message }).command,
+            param: msg.substr(msg.indexOf(' ') === -1 ? null : msg.indexOf(' ') + 1),
         };
     }
 
     private getImages(): Promise<any> {
         let promise = new Promise((resolve, reject) => {
-            glob('+(*.jpg|*.png|*.gif)', { cwd: './assets/' }, (error, files) => {
+            glob('**/*+(*.jpg|*.png|*.gif)', { cwd: './assets/img/' }, (error, files) => {
                 _.forEach(files, file => {
-                    this.images.push({ ext: file.split('.')[1], fileName: file.split('.')[0] });
+                    let filePath = file.split('.')[0].split('/');
+                    this.images.push({ ext: file.split('.')[1], fileName: filePath[1], folder: filePath[0] });
                 });
 
-                if (this.images.length >= 1) {
-                    resolve(this.images);
+                if (error) {
+                    reject(error);
+                    this.logger.error(chalk.red.bold(error.message));
                 } else {
-                    reject('There was an error getting images!');
-                    this.logger.error(chalk.red.bold('There was an error getting images!'));
+                    resolve(this.images);
+                }
+            });
+        });
+
+        return promise;
+    }
+
+    private getMainCommands(): Promise<any> {
+        let promise = new Promise((resolve, reject) => {
+            glob('**/*.ts', { cwd: './src/models/commands/' }, (error, files) => {
+                let mainCommands: Array<string> = [];
+
+                _.forEach(files, file => {
+                    mainCommands.push(path.basename(file, path.extname(file)));
+                });
+
+                if (error) {
+                    reject(error);
+                    this.logger.error(chalk.red.bold(error.message));
+                } else {
+                    resolve(mainCommands);
                 }
             });
         });

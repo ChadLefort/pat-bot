@@ -1,20 +1,20 @@
-import * as Interface from '../interfaces/index';
+import * as Interface from '../interfaces';
 import { Gif } from './commands/gif';
 import { Help } from './commands/help';
-import { Meow } from './commands/meow';
+import { Pat } from './commands/pat';
 import { Silly } from './commands/silly';
 import * as _ from 'lodash';
 
 export default class Commands {
     private static instance: Commands;
-    private commandInfo: Array<Interface.ICommandInfo> = [];
-    public commands: Interface.ICommands;
+    private commandDetails: Array<Interface.ICommandDetail> = [];
+    public mainCommands: Interface.IMainCommands;
 
     private constructor() {
-        this.commands = {
+        this.mainCommands = {
             gif: Gif.getInstance(),
             help: Help.getInstance(),
-            meow: Meow.getInstance(),
+            pat: Pat.getInstance(),
             silly: Silly.getInstance(),
         };
     }
@@ -23,22 +23,22 @@ export default class Commands {
         return this.instance || (this.instance = new Commands());
     }
 
-    public getCommandInfo(prefix: string, images: Array<Interface.IImage>): Array<Interface.ICommandInfo> {
-        this.commandInfo = [
-            { command: `${prefix}pat`},
-            { command: `${prefix}help`},
-            { command: `${prefix}gif`, param: 'the phrase to search' },
-        ];
+    public getCommandDetails(prefix: string, images: Array<Interface.IImage>): Array<Interface.ICommandDetail> {
+        this.commandDetails = _.union(
+            this.mainCommands.gif.getCommandDetails(),
+            this.mainCommands.help.getCommandDetails(),
+            this.mainCommands.pat.getCommandDetails(images),
+            this.mainCommands.silly.getCommandDetails(images)
+        );
 
-        _.forEach(images, (image: Interface.IImage) => {
-            this.commandInfo.push({ command: `${prefix}silly`, param: image.fileName });
-        });
-
-        return this.commandInfo;
+        return _.chain(this.commandDetails)
+            .orderBy('command', 'asc')
+            .forEach(commandDetail => commandDetail.command = prefix + commandDetail.command)
+            .value();
     }
 }
 
 export { Gif } from './commands/gif';
 export { Help } from './commands/help';
-export { Meow } from './commands/meow';
+export { Pat } from './commands/pat';
 export { Silly } from './commands/silly';
