@@ -1,9 +1,11 @@
 import { getImage } from '../../helpers';
-import {  ICommandDetail, ICommandParams, IImage } from '../../interfaces';
+import { ICommand, ICommandDetail, ICommandParams, IImage } from '../../interfaces';
+import Config from '../config';
 import * as _ from 'lodash';
 
-export class Pat {
+export class Pat implements ICommand {
     private static instance: Pat;
+    private prefix = Config.getInstance().prefix;
     private commandDetails: Array<ICommandDetail>;
 
     public static getInstance(): Pat {
@@ -11,7 +13,7 @@ export class Pat {
     }
 
     public execute(params: ICommandParams): void {
-        let meow = ['pat'].map(cmd => params.prefix + cmd);
+        let meow = ['pat'].map(cmd => this.prefix + cmd);
 
         if (_.includes(meow, params.msg.content)) {
             params.msg.channel.sendMessage('Meow!');

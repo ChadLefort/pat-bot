@@ -1,34 +1,38 @@
 import * as Interface from '../interfaces';
 import Commands from './commands';
+import Config from './config';
+import InstanceLoader from './instance-loader';
 import * as Promise from 'bluebird';
 import * as chalk from 'chalk';
 import * as Discord from 'discord.js';
 import * as glob from 'glob';
 import * as _ from 'lodash';
-import * as path from 'path';
-import * as winston from 'winston';
 
 export default class PatBot {
-    private images: Array<Interface.IImage> = [];
+    private prefix = Config.getInstance().prefix;
+    private logger = Config.getInstance().logger;
     private client: Discord.Client;
-    private prefix: string = '!';
-    private mainCommands: Interface.IMainCommands;
+    private images: Array<Interface.IImage> = [];
     private commandDetails: Array<Interface.ICommandDetail> = [];
+    private mainCommands: Array<string> = [];
 
-    constructor(private token: string, private logger: winston.LoggerInstance) {
+    constructor(private token: string) {
         this.client = new Discord.Client();
         this.client.login(this.token);
-        this.mainCommands = Commands.getInstance().mainCommands;
     }
 
     public execute(): void {
-        this.getImages().then(data => {
-            this.images = data;
-            this.commandDetails = Commands.getInstance().getCommandDetails(this.prefix, this.images);
+        Commands.getInstance().getMainCommands().then(mainCommands => {
+            this.mainCommands = mainCommands;
         });
 
-        this.getMainCommands().then(data => {
-            console.log(data);
+        this.getImages().then(data => {
+            this.images = data;
+            return this.images;
+        }).then(images => {
+            Commands.getInstance().getCommandDetails(images).then(data => {
+                this.commandDetails = data;
+            });
         });
 
         this.client.on('ready', () => {
@@ -57,73 +61,43 @@ export default class PatBot {
         }
 
         let params: Interface.ICommandParams = {
-            logger: this.logger,
+            commandDetails: this.commandDetails,
+            images: this.images,
             msg: msg,
-            prefix: this.prefix,
             processedCommand: processedCommand,
         };
 
-        switch (processedCommand.command) {
-            case `${this.prefix}help`:
-                params.commandDetails = this.commandDetails;
-                this.mainCommands.help.execute(params);
-                break;
-            case `${this.prefix}silly`:
-                params.images = this.images;
-                this.mainCommands.silly.execute(params);
-                break;
-            case `${this.prefix}gif`:
-                this.mainCommands.gif.execute(params);
-                break;
-            default:
-                params.images = this.images;
-                this.mainCommands.pat.execute(params);
-        }
+        console.log(processedCommand);
+
+        InstanceLoader.getInstance<Interface.ICommand>(processedCommand.className).execute(params);
     }
 
     private processCommand(msg: string): Interface.IProssedCommand {
-        let message = msg.substr(0, msg.indexOf(' ') === -1 ? msg.length : msg.indexOf(' '));
+        let [command, ...parameter] = _.chain(msg).replace('!', '').split(' ').value();
+        let parameterJoin = _.join(parameter, ' ');
 
         return {
-            command: _.find(this.commandDetails, { command: message }).command,
-            param: msg.substr(msg.indexOf(' ') === -1 ? null : msg.indexOf(' ') + 1),
+            className: _.chain(_.split(command, '-')).map((value: string) => _.capitalize(value)).join('').value(),
+            command: this.mainCommands[_.indexOf(this.mainCommands, command)],
+            parameter: _.isEmpty(parameterJoin) ? null : parameterJoin,
         };
     }
 
     private getImages(): Promise<any> {
         let promise = new Promise((resolve, reject) => {
             glob('**/*+(*.jpg|*.png|*.gif)', { cwd: './assets/img/' }, (error, files) => {
+                let images: Array<Interface.IImage> = [];
+
                 _.forEach(files, file => {
                     let filePath = file.split('.')[0].split('/');
-                    this.images.push({ ext: file.split('.')[1], fileName: filePath[1], folder: filePath[0] });
+                    images.push({ ext: file.split('.')[1], fileName: filePath[1], folder: filePath[0] });
                 });
 
                 if (error) {
                     reject(error);
                     this.logger.error(chalk.red.bold(error.message));
                 } else {
-                    resolve(this.images);
-                }
-            });
-        });
-
-        return promise;
-    }
-
-    private getMainCommands(): Promise<any> {
-        let promise = new Promise((resolve, reject) => {
-            glob('**/*.ts', { cwd: './src/models/commands/' }, (error, files) => {
-                let mainCommands: Array<string> = [];
-
-                _.forEach(files, file => {
-                    mainCommands.push(path.basename(file, path.extname(file)));
-                });
-
-                if (error) {
-                    reject(error);
-                    this.logger.error(chalk.red.bold(error.message));
-                } else {
-                    resolve(mainCommands);
+                    resolve(images);
                 }
             });
         });

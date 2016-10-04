@@ -1,7 +1,7 @@
-import { ICommandDetail, ICommandParams } from '../../interfaces/index';
+import { ICommand, ICommandDetail, ICommandParams } from '../../interfaces/index';
 import * as _ from 'lodash';
 
-export class Help {
+export class Help implements ICommand {
     private static instance: Help;
     private commandDetails: Array<ICommandDetail>;
 

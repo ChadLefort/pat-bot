@@ -1,8 +1,8 @@
 import { getImage } from '../../helpers';
-import { ICommandDetail, ICommandParams, IImage } from '../../interfaces';
+import { ICommand, ICommandDetail, ICommandParams, IImage } from '../../interfaces';
 import * as _ from 'lodash';
 
-export class Silly {
+export class Silly implements ICommand {
     private static instance: Silly;
     private commandDetails: Array<ICommandDetail>;
 
@@ -11,7 +11,7 @@ export class Silly {
     }
 
     public execute(params: ICommandParams): void {
-        if (params.processedCommand.param === 'citizens') {
+        if (params.processedCommand.parameter === 'citizens') {
             params.msg.channel.sendMessage(this.citizens(params.msg.guild.name), { disable_everyone: false });
         } else {
             getImage(params);

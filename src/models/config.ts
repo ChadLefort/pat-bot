@@ -3,11 +3,24 @@ import * as fs from 'fs';
 import * as winston from 'winston';
 
 export default class Config {
-    constructor() {
+    private static instance: Config;
+    public prefix: string;
+    public token: string;
+    public logger: winston.LoggerInstance;
+
+    private constructor() {
         config();
+
+        this.prefix = '!';
+        this.token = process.env.DISCORD_TOKEN;
+        this.logger = this.getLogger();
     }
 
-    public logger(): winston.LoggerInstance {
+    public static getInstance(): Config {
+        return this.instance || (this.instance = new Config());
+    }
+
+    public getLogger(): winston.LoggerInstance {
         const env = process.env.NODE_ENV || 'development';
         const logDir = 'log';
         const tsFormat = () => (new Date()).toLocaleTimeString();

@@ -1,40 +1,65 @@
 import * as Interface from '../interfaces';
-import { Gif } from './commands/gif';
-import { Help } from './commands/help';
-import { Pat } from './commands/pat';
-import { Silly } from './commands/silly';
+import Config from './config';
+import InstanceLoader from './instance-loader';
+import * as Promise from 'bluebird';
+import * as chalk from 'chalk';
+import * as glob from 'glob';
 import * as _ from 'lodash';
+import * as path from 'path';
 
 export default class Commands {
     private static instance: Commands;
-    private commandDetails: Array<Interface.ICommandDetail> = [];
-    public mainCommands: Interface.IMainCommands;
-
-    private constructor() {
-        this.mainCommands = {
-            gif: Gif.getInstance(),
-            help: Help.getInstance(),
-            pat: Pat.getInstance(),
-            silly: Silly.getInstance(),
-        };
-    }
+    private prefix = Config.getInstance().prefix;
+    private logger = Config.getInstance().logger;
 
     public static getInstance(): Commands {
         return this.instance || (this.instance = new Commands());
     }
 
-    public getCommandDetails(prefix: string, images: Array<Interface.IImage>): Array<Interface.ICommandDetail> {
-        this.commandDetails = _.union(
-            this.mainCommands.gif.getCommandDetails(),
-            this.mainCommands.help.getCommandDetails(),
-            this.mainCommands.pat.getCommandDetails(images),
-            this.mainCommands.silly.getCommandDetails(images)
-        );
+    public getCommandDetails(images: Array<Interface.IImage>): Promise<any> {
+        let promise = new Promise((resolve, reject) => {
+            this.getMainCommands().then(mainCommands => {
+                let commandDetails: Array<Interface.ICommandDetail> = [];
 
-        return _.chain(this.commandDetails)
-            .orderBy('command', 'asc')
-            .forEach(commandDetail => commandDetail.command = prefix + commandDetail.command)
-            .value();
+                _.forEach(mainCommands, mainCommand => {
+                    let className = _.chain(_.split(mainCommand, '-')).map((value: string) => _.capitalize(value)).join('').value();
+
+                    _.forEach(InstanceLoader.getInstance<Interface.ICommand>(className).getCommandDetails(images), commandDetail => {
+                        commandDetails.push(commandDetail);
+                    });
+                });
+
+                let results = _.chain(commandDetails)
+                    .orderBy('command', 'asc')
+                    .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
+                    .value();
+
+                resolve(results);
+            });
+        });
+
+        return promise;
+    }
+
+    public getMainCommands(): Promise<any> {
+        let promise = new Promise((resolve, reject) => {
+            glob('**/*.ts', { cwd: './src/models/commands/' }, (error, files) => {
+                let mainCommands: Array<string> = [];
+
+                _.forEach(files, file => {
+                    mainCommands.push(path.basename(file, path.extname(file)));
+                });
+
+                if (error) {
+                    reject(error);
+                    this.logger.error(chalk.red.bold(error.message));
+                } else {
+                    resolve(mainCommands);
+                }
+            });
+        });
+
+        return promise;
     }
 }
 

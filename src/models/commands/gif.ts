@@ -1,9 +1,11 @@
-import { ICommandDetail, ICommandParams, IGiphy } from '../../interfaces/index';
+import { ICommand, ICommandDetail, ICommandParams, IGiphy } from '../../interfaces';
+import Config from '../config';
 import * as chalk from 'chalk';
 import * as request from 'request-promise';
 
-export class Gif {
+export class Gif implements ICommand {
     private static instance: Gif;
+    private logger = Config.getInstance().logger;
     private commandDetails: Array<ICommandDetail>;
 
     public static getInstance(): Gif {
@@ -18,7 +20,7 @@ export class Gif {
                 format: 'json',
                 limit: 1,
                 rating: 'r',
-                tag: params.processedCommand.param,
+                tag: params.processedCommand.parameter,
             },
             url: `http://api.giphy.com/v1/gifs/random`,
         };
@@ -27,7 +29,7 @@ export class Gif {
             .then((results: IGiphy) => {
                 params.msg.channel.sendFile(results.data.image_original_url);
             })
-            .catch(error => params.logger.error(chalk.red.bold(error)));
+            .catch(error => this.logger.error(chalk.red.bold(error)));
     }
 
     public getCommandDetails(): Array<ICommandDetail> {
