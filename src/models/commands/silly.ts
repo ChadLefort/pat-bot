@@ -1,5 +1,5 @@
 import { getImage } from '../../helpers';
-import { ICommand, ICommandDetail, ICommandParams, IImage } from '../../interfaces';
+import { ICommand, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
 import * as _ from 'lodash';
 
 export class Silly implements ICommand {
@@ -10,7 +10,7 @@ export class Silly implements ICommand {
         return this.instance || (this.instance = new Silly());
     }
 
-    public execute(params: ICommandParams): void {
+    public execute(params: ICommandParameters): void {
         if (params.processedCommand.parameter === 'citizens') {
             params.msg.channel.sendMessage(this.citizens(params.msg.guild.name), { disable_everyone: false });
         } else {

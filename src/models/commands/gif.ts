@@ -1,6 +1,5 @@
-import { ICommand, ICommandDetail, ICommandParams, IGiphy } from '../../interfaces';
+import { ICommand, ICommandDetail, ICommandParameters, IGiphy } from '../../interfaces';
 import Config from '../config';
-import * as chalk from 'chalk';
 import * as request from 'request-promise';
 
 export class Gif implements ICommand {
@@ -12,7 +11,7 @@ export class Gif implements ICommand {
         return this.instance || (this.instance = new Gif());
     }
 
-    public execute(params: ICommandParams): void {
+    public async execute(params: ICommandParameters): Promise<void> {
         const options = {
             json: true,
             qs: {
@@ -25,11 +24,12 @@ export class Gif implements ICommand {
             url: `http://api.giphy.com/v1/gifs/random`,
         };
 
-        request(options)
-            .then((results: IGiphy) => {
-                params.msg.channel.sendFile(results.data.image_original_url);
-            })
-            .catch(error => this.logger.error(chalk.red.bold(error)));
+        try {
+            let results: IGiphy = await request(options);
+            params.msg.channel.sendFile(results.data.image_original_url);
+        } catch (error) {
+            this.logger.error(error);
+        }
     }
 
     public getCommandDetails(): Array<ICommandDetail> {

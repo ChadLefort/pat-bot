@@ -1,5 +1,5 @@
 import { getImage } from '../../helpers';
-import { ICommand, ICommandDetail, ICommandParams, IImage } from '../../interfaces';
+import { ICommand, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
 import Config from '../config';
 import * as _ from 'lodash';
 
@@ -12,7 +12,7 @@ export class Pat implements ICommand {
         return this.instance || (this.instance = new Pat());
     }
 
-    public execute(params: ICommandParams): void {
+    public execute(params: ICommandParameters): void {
         let meow = ['pat'].map(cmd => this.prefix + cmd);
 
         if (_.includes(meow, params.msg.content)) {

@@ -1,4 +1,3 @@
-import { ICommandDetail } from './commands';
 import * as Discord from 'discord.js';
 
 export interface IImage {
@@ -7,11 +6,9 @@ export interface IImage {
     folder: string;
 }
 
-export interface ICommandParams {
+export interface ICommandParameters {
     msg: Discord.Message;
     processedCommand: IProssedCommand;
-    commandDetails: Array<ICommandDetail>;
-    images: Array<IImage>;
 }
 
 export interface IProssedCommand {
