@@ -15,9 +15,17 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "test": "gulp test"
+    "clean": "rimraf lib",
+    "deploy": "npm run clean && echo Using TypeScript && tsc --version && tsc --pretty",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "build": "npm run clean && npm run lint && echo Using TypeScript && tsc --version && tsc --pretty",
+    "test": "npm run build && mocha --compilers ts:ts-node/register --recursive test/**/*-spec.ts",
+    "watch": "npm run build -- --watch",
+    "watch:test": "npm run test -- --watch"
   },
+  "start": "node lib/index.js",
   "dependencies": {
+    "@types/bluebird": "^3.0.33",
     "@types/dotenv": "^2.0.18",
     "@types/glob": "^5.0.30",
     "@types/lodash": "^4.14.36",
@@ -25,25 +33,20 @@
     "@types/request": "0.0.31",
     "@types/request-promise": "^3.0.32",
     "@types/winston": "0.0.28",
+    "bluebird": "^3.4.6",
     "discord.js": "^9.3.0",
     "dotenv": "^2.0.0",
     "glob": "^7.1.0",
     "lodash": "^4.16.2",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "rimraf": "^2.5.4"
   },
   "devDependencies": {
     "@types/chai": "3.4.30",
     "@types/mocha": "2.2.29",
     "chai": "3.5.0",
-    "del": "^2.2.1",
-    "dotbin": "^1.0",
-    "gulp": "^3.9.0",
-    "gulp-help": "^1.6.0",
-    "gulp-mocha": "^3.0.0",
-    "gulp-nodemon": "^2.2.0",
-    "gulp-tslint": "^6.0",
     "ts-node": "^1.2.2",
     "tslint": "3.14.0-dev.1",
     "typescript": "2.0.0"

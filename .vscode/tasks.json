@@ -1,10 +1,9 @@
 {
   "version": "0.1.0",
-  "command": "node_modules/.bin/gulp",
+  "command": "npm",
   "isShellCommand": true,
-  "args": [
-    "--no-color"
-  ],
+  "args": ["run"],
+  "showOutput": "always",
   "tasks": [
     {
       "taskName": "build",
