@@ -12,7 +12,11 @@ export class Silly implements ICommand {
 
     public execute(params: ICommandParameters): void {
         if (params.processedCommand.parameter === 'citizens') {
-            params.msg.channel.sendMessage(this.citizens(params.msg.guild.name), { disable_everyone: false });
+            if (params.msg.channel.type === 'text') {
+                params.msg.channel.sendMessage(this.citizens(params.msg.guild.name), { disable_everyone: false });
+            } else {
+                params.msg.channel.sendMessage('Message can only be sent in a guild text channel.');
+            }
         } else {
             getImage(params);
         }
