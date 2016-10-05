@@ -1,1 +1,1 @@
-web: npm run-script deploy
+worker: npm run-script deploy
