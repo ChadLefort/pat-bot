@@ -16,7 +16,7 @@
   "typings": "lib/index.d.ts",
   "scripts": {
     "clean": "rimraf lib",
-    "deploy": "./node_modules/.bin/tsc --pretty && npm run start",
+    "deploy": "./node_modules/.bin/tsc --pretty && node lib/pm2.js",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "build": "npm run clean && npm run lint && echo Using TypeScript && tsc --version && tsc --pretty",
     "test": "npm run build && mocha --compilers ts:ts-node/register --recursive test/**/*-spec.ts",
@@ -38,6 +38,7 @@
     "dotenv": "^2.0.0",
     "glob": "^7.1.0",
     "lodash": "^4.16.2",
+    "pm2": "^2.0.18",
     "request": "^2.75.0",
     "request-promise": "^4.1.1",
     "rimraf": "^2.5.4",
