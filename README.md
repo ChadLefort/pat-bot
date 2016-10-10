@@ -1,5 +1,7 @@
 # Pat Bot
 
+[![Build Status](https://travis-ci.org/ChadLefort/pat-bot.svg?branch=master)](https://travis-ci.org/ChadLefort/pat-bot)
+
 ## About
 
 Pat Bot is a silly Discord bot named after my cat.
