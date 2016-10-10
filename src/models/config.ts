@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import * as fs from 'fs';
+import * as pm2 from 'pm2';
 import * as winston from 'winston';
 
 export default class Config {
@@ -26,13 +27,14 @@ export default class Config {
             transports: [
                 new (winston.transports.Console)({
                     colorize: true,
-                    level: 'info',
-                    timestamp: 'YYYY-MM-DD HH:mm Z',
+                    level: env === 'development' ? 'debug' : 'info',
+                    timestamp: () => (new Date()).toLocaleTimeString(),
                 }),
                 new (winston.transports.File)({
                     filename: `${logDir}/winston.log`,
                     handleExceptions: true,
                     humanReadableUnhandledException: true,
+                    json: false,
                     level: env === 'development' ? 'debug' : 'info',
                     timestamp: 'YYYY-MM-DD HH:mm Z',
                 }),
@@ -45,7 +47,6 @@ export default class Config {
     }
 
     public startPM2() {
-        let pm2 = require('pm2');
         let maxMemory = process.env.WEB_MEMORY || 256;
         const logDir = 'log';
 
@@ -60,19 +61,7 @@ export default class Config {
                 name: 'pat-bot',
                 script: 'lib/index.js',
             }, () => {
-                pm2.interact(process.env.KEYMETRICS_PRIVATE, process.env.KEYMETRICS_PUBLIC, 'pat-bot', () => {
-                    pm2.launchBus((err: any, bus: any) => {
-                        console.log('[PM2] Log streaming started');
-
-                        bus.on('log:out', (packet: any) => {
-                            console.log('[App:%s] %s', packet.process.name, packet.data);
-                        });
-
-                        bus.on('log:err', (packet: any) => {
-                            console.error('[App:%s][Err] %s', packet.process.name, packet.data);
-                        });
-                    });
-                });
+                pm2.interact(process.env.KEYMETRICS_PRIVATE, process.env.KEYMETRICS_PUBLIC, 'dokku');
             });
         });
 
