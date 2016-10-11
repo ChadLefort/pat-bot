@@ -9,5 +9,5 @@ after_success:
 - git push deploy
 before_install:
 - echo -e "Host $SERVER\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-- openssl aes-256-cbc -K $encrypted_62da1aba3443_key -iv $encrypted_62da1aba3443_iv in pat-bot.pem.enc -out ~/.ssh/id_rsa -d
+- openssl aes-256-cbc -K $encrypted_62da1aba3443_key -iv $encrypted_62da1aba3443_iv -in pat-bot.pem.enc -out ~/.ssh/id_rsa -d
 - chmod 600 ~/.ssh/id_rsa
