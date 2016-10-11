@@ -4,6 +4,8 @@ node_js:
 sudo: false
 script:
 - npm test
+branches:
+  only: master
 after_success:
 - git remote add deploy $REPO
 - git push deploy
