@@ -16,7 +16,7 @@ export class Pat implements ICommand {
         let meow = ['pat'].map(cmd => this.prefix + cmd);
 
         if (_.includes(meow, params.msg.content)) {
-            params.msg.channel.sendMessage('Meow!');
+            params.msg.channel.sendMessage('Meow!!!');
         } else {
             getImage(params);
         }
@@ -25,7 +25,7 @@ export class Pat implements ICommand {
     public getCommandDetails(images: Array<IImage>): Array<ICommandDetail> {
         this.commandDetails = [{
             command: 'pat',
-            description: 'Meow!',
+            description: 'Meow!!!',
         }];
 
         _.forEach(images, (image: IImage) => {
