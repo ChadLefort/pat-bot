@@ -1,4 +1,3 @@
-import { config } from 'dotenv';
 import * as fs from 'fs';
 import * as pm2 from 'pm2';
 import * as winston from 'winston';
@@ -10,7 +9,6 @@ export default class Config {
     public logger: winston.LoggerInstance;
 
     private constructor() {
-        config();
         this.prefix = '!';
         this.token = process.env.DISCORD_TOKEN;
         this.logger = this.getLogger();
