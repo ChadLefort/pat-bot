@@ -13,4 +13,4 @@ after_success:
 - chmod 600 .travis/pat-bot.pem
 - ssh-add .travis/pat-bot.pem
 - git remote add deploy $REPO
-- git push deploy
+- git push deploy master
