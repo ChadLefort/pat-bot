@@ -1,13 +1,16 @@
 language: node_js
 node_js:
-  - "6.7.0"
+- 6.7.0
 sudo: false
 script:
-  - npm test
+- npm test
+before_install:
+- echo -e "Host $SERVER\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+- openssl aes-256-cbc -K $encrypted_62da1aba3443_key -iv $encrypted_62da1aba3443_iv
+  -in pat-bot.pem.enc -out pat-bot.pem -d
 after_success:
-  - eval "$(ssh-agent -s)"
-  - echo -e "$DEPLOY_KEY" > deploy_key.pem
-  - chmod 600 deploy_key.pem
-  - ssh-add deploy_key.pem
-  - git remote add deploy $REPO
-  - git push deploy master
+- eval "$(ssh-agent -s)"
+- chmod 600 .travis/pat-bot.pem
+- ssh-add .travis/pat-bot.pem
+- git remote add deploy $REPO
+- git push deploy
