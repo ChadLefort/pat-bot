@@ -4,8 +4,11 @@ node_js:
 sudo: false
 script:
   - npm test
-deploy:
-  provider: script
-  script: scripts/deploy.sh
-  on:
-    branch: master
+before_install:
+  - openssl aes-256-cbc -K $encrypted_d0a7a59bc9fd_key -iv $encrypted_d0a7a59bc9fd_iv -in pat-bot.enc -out pat-bot -d
+after_success:
+  - eval "$(ssh-agent -s)"
+  - chmod 600 .travis/pat-bot
+  - ssh-add .travis/pat-bot
+  - git remote add deploy $REPO
+  - git push deploy
