@@ -1,13 +1,13 @@
 import { getImage } from '../../helpers';
-import { ICommand, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
+import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
 import * as _ from 'lodash';
 
-export class Silly implements ICommand {
-    private static instance: Silly;
+export class Wow implements ICommand {
+    private static instance: Wow;
     private commandDetails: Array<ICommandDetail>;
 
-    public static getInstance(): Silly {
-        return this.instance || (this.instance = new Silly());
+    public static getInstance(): Wow {
+        return this.instance || (this.instance = new Wow());
     }
 
     public execute(params: ICommandParameters): void {
@@ -36,9 +36,9 @@ Cold logic deemed our world not worth saving. Cold logic, however, does not acco
         return rhonin;
     }
 
-    public getCommandDetails(images: Array<IImage>): Array<ICommandDetail> {
+    public getCommandDetails(images: Array<IImage>): ICommandCategory {
         this.commandDetails = [{
-            command: 'silly',
+            command: 'wow',
             description: 'Rhonin has something to tell you!',
             parameters: ['citizens'],
         }];
@@ -47,12 +47,15 @@ Cold logic deemed our world not worth saving. Cold logic, however, does not acco
             this.commandDetails.push(
                 {
                     command: image.folder,
-                    description: 'A silly meme, gif, or image.',
+                    description: 'A WoW related meme, gif, or image.',
                     parameters: [image.fileName],
                 }
             );
         });
 
-        return this.commandDetails;
+        return {
+            category: 'fun',
+            commandDetails: this.commandDetails,
+        };
     }
 }

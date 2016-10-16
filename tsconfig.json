@@ -12,7 +12,8 @@
     "outDir": "./lib",
     "preserveConstEnums": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "watch": true
   },
   "include": [
     "src/**/*"

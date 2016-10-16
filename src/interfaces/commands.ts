@@ -6,7 +6,12 @@ export interface ICommandDetail {
     description?: string;
 }
 
+export interface ICommandCategory {
+    commandDetails: Array<ICommandDetail>;
+    category: string;
+}
+
 export interface ICommand {
     execute(params: ICommandParameters): void | Promise<void>;
-    getCommandDetails(images?: Array<IImage>): Array<ICommandDetail>;
+    getCommandDetails(images?: Array<IImage>): ICommandCategory;
 }

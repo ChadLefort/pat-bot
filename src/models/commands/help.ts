@@ -1,7 +1,7 @@
-import { ICommand, ICommandDetail, ICommandParameters } from '../../interfaces/index';
-import Commands from '../../models/commands';
+import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters } from '../../interfaces/index';
+// import Commands from '../../models/commands';
 import Config from '../../models/config';
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 
 export class Help implements ICommand {
     private static instance: Help;
@@ -15,17 +15,26 @@ export class Help implements ICommand {
     public async execute(params: ICommandParameters): Promise<void> {
         try {
             let help: Array<string> = [];
-            let commandDetails = await Commands.getInstance().getCommandDetails();
+            // let commandDetails = await Commands.getInstance().getCommandDetails();
+            // let filtered = _.union(
+            //     this.commandDetails,
+            //     _.filter(commandDetails, commandDetail => {
+            //         if (_.includes(commandDetail.parameters, 'help')
+            //             || _.includes(commandDetail.parameters, 'search term')) {
+            //             return commandDetail;
+            //         }
+            //     })
+            // );
 
-            _.forEach(commandDetails, commandDetail => {
-                if (_.isUndefined(commandDetail.parameters)) {
-                    help.push(`command: ${commandDetail.command}, description: ${commandDetail.description}`);
-                } else {
-                    _.forEach(commandDetail.parameters, parameter => {
-                        help.push(`command: ${commandDetail.command} ${parameter}, description: ${commandDetail.description}`);
-                    });
-                }
-            });
+            // _.forEach(commandDetails, commandDetail => {
+            //     if (_.isUndefined(commandDetail.parameters)) {
+            //         help.push(`command: ${commandDetail.command}`);
+            //     } else {
+            //         _.forEach(commandDetail.parameters, parameter => {
+            //             help.push(`command: ${commandDetail.command} ${parameter}`);
+            //         });
+            //     }
+            // });
 
             params.msg.author.sendMessage('```' + help.join('\n') + '```');
         } catch (error) {
@@ -33,12 +42,16 @@ export class Help implements ICommand {
         }
     }
 
-    public getCommandDetails(): Array<ICommandDetail> {
+    public getCommandDetails(): ICommandCategory {
         this.commandDetails = [{
             command: 'help',
             description: 'List all commands.',
+            parameters: ['all'],
         }];
 
-        return this.commandDetails;
+        return {
+            category: 'help',
+            commandDetails: this.commandDetails,
+        };
     }
 }

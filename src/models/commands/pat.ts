@@ -1,28 +1,40 @@
 import { getImage } from '../../helpers';
-import { ICommand, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
+import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
+import Commands from '../commands';
 import Config from '../config';
 import * as _ from 'lodash';
 
 export class Pat implements ICommand {
     private static instance: Pat;
-    private prefix = Config.getInstance().prefix;
+    private logger = Config.getInstance().logger;
     private commandDetails: Array<ICommandDetail>;
+    private images: Array<IImage> = [];
 
     public static getInstance(): Pat {
         return this.instance || (this.instance = new Pat());
     }
 
     public execute(params: ICommandParameters): void {
-        let meow = ['pat'].map(cmd => this.prefix + cmd);
+        try {
+            this.images = _.filter(Commands.getInstance().images, { folder: 'pat' });
 
-        if (_.includes(meow, params.msg.content)) {
-            params.msg.channel.sendMessage('Meow!!!');
-        } else {
-            getImage(params);
+            if (_.isNull(params.processedCommand.parameter)) {
+                params.msg.channel.sendMessage('Meow!');
+            } else {
+                switch (params.processedCommand.parameter) {
+                    case _.find(this.images, { fileName: params.processedCommand.parameter }).fileName:
+                        getImage(params);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (error) {
+            this.logger.error(error);
         }
     }
 
-    public getCommandDetails(images: Array<IImage>): Array<ICommandDetail> {
+    public getCommandDetails(images: Array<IImage>): ICommandCategory {
         this.commandDetails = [{
             command: 'pat',
             description: 'Meow!!!',
@@ -32,12 +44,15 @@ export class Pat implements ICommand {
             this.commandDetails.push(
                 {
                     command: image.folder,
-                    description: 'A cute image of Pat!',
+                    description: 'An image of Pat!',
                     parameters: [image.fileName],
                 }
             );
         });
 
-        return this.commandDetails;
+        return {
+            category: 'fun',
+            commandDetails: this.commandDetails,
+        };
     }
 }

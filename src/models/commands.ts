@@ -7,7 +7,7 @@ import * as path from 'path';
 
 export default class Commands {
     private static instance: Commands;
-    private prefix = Config.getInstance().prefix;
+    // private prefix = Config.getInstance().prefix;
     private logger = Config.getInstance().logger;
     public images: Array<Interface.IImage> = [];
 
@@ -50,10 +50,10 @@ export default class Commands {
         return promise;
     }
 
-    public getCommandDetails(): Promise<Array<Interface.ICommandDetail>> {
+    public getCommandDetails(): Promise<Array<Interface.ICommandCategory>> {
         let promise = new Promise((resolve, reject) => {
             this.getMainCommands().then(mainCommands => {
-                let commandDetails: Array<Interface.ICommandDetail> = [];
+                let commandDetails: Array<Interface.ICommandCategory> = [];
 
                 _.forEach(mainCommands, mainCommand => {
                     let className = _.chain(_.split(mainCommand, '-')).map((value: string) => _.capitalize(value)).join('').value();
@@ -64,8 +64,8 @@ export default class Commands {
                 });
 
                 let results = _.chain(commandDetails)
-                    .orderBy('command', 'asc')
-                    .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
+                    .orderBy('category', 'asc')
+                    // .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
                     .value();
 
                 resolve(results);
@@ -102,4 +102,4 @@ export { Gif } from './commands/gif';
 export { Help } from './commands/help';
 export { Pat } from './commands/pat';
 export { Roll } from './commands/roll';
-export { Silly } from './commands/silly';
+export { Wow } from './commands/wow';
