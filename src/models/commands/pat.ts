@@ -1,5 +1,5 @@
 import { getImage } from '../../helpers';
-import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
+import { ICommand, ICommands, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
 import Commands from '../commands';
 import Config from '../config';
 import * as _ from 'lodash';
@@ -34,7 +34,7 @@ export class Pat implements ICommand {
         }
     }
 
-    public getCommandDetails(images: Array<IImage>): ICommandCategory {
+    public getCommands(images: Array<IImage>): ICommands {
         this.commandDetails = [{
             command: 'pat',
             description: 'Meow!!!',

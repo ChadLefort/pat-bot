@@ -1,4 +1,4 @@
-import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters } from '../../interfaces';
+import { ICommand, ICommands, ICommandDetail, ICommandParameters } from '../../interfaces';
 import * as _ from 'lodash';
 
 export class Roll implements ICommand {
@@ -20,7 +20,7 @@ export class Roll implements ICommand {
         params.msg.channel.sendMessage(_.random(1, maxRoll));
     }
 
-    public getCommandDetails(): ICommandCategory {
+    public getCommands(): ICommands {
         this.commandDetails = [{
             command: 'roll',
             description: 'Roll a random number between 1 and 100!',

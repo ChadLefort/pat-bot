@@ -1,4 +1,4 @@
-import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters } from '../../interfaces/index';
+import { ICommand, ICommands, ICommandDetail, ICommandParameters } from '../../interfaces/index';
 // import Commands from '../../models/commands';
 import Config from '../../models/config';
 // import * as _ from 'lodash';
@@ -42,7 +42,7 @@ export class Help implements ICommand {
         }
     }
 
-    public getCommandDetails(): ICommandCategory {
+    public getCommands(): ICommands {
         this.commandDetails = [{
             command: 'help',
             description: 'List all commands.',

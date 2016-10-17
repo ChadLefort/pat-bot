@@ -1,5 +1,5 @@
 import { getImage } from '../../helpers';
-import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
+import { ICommand, ICommands, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
 import * as _ from 'lodash';
 
 export class Wow implements ICommand {
@@ -36,7 +36,7 @@ Cold logic deemed our world not worth saving. Cold logic, however, does not acco
         return rhonin;
     }
 
-    public getCommandDetails(images: Array<IImage>): ICommandCategory {
+    public getCommands(images: Array<IImage>): ICommands {
         this.commandDetails = [{
             command: 'wow',
             description: 'Rhonin has something to tell you!',

@@ -50,15 +50,15 @@ export default class Commands {
         return promise;
     }
 
-    public getCommandDetails(): Promise<Array<Interface.ICommandCategory>> {
+    public getCommandsGrouped(): Promise<Array<Interface.ICommands>> {
         let promise = new Promise((resolve, reject) => {
             this.getMainCommands().then(mainCommands => {
-                let commandDetails: Array<Interface.ICommandCategory> = [];
+                let commandDetails: Array<Interface.ICommands> = [];
 
                 _.forEach(mainCommands, mainCommand => {
                     let className = _.chain(_.split(mainCommand, '-')).map((value: string) => _.capitalize(value)).join('').value();
 
-                    _.forEach(InstanceLoader.getInstance<Interface.ICommand>(className).getCommandDetails(this.images), commandDetail => {
+                    _.forEach(InstanceLoader.getInstance<Interface.ICommand>(className).getCommands(this.images), commandDetail => {
                         commandDetails.push(commandDetail);
                     });
                 });

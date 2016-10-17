@@ -1,4 +1,4 @@
-import { ICommand, ICommandCategory, ICommandDetail, ICommandParameters, IGiphy } from '../../interfaces';
+import { ICommand, ICommands, ICommandDetail, ICommandParameters, IGiphy } from '../../interfaces';
 import Config from '../config';
 import * as request from 'request-promise';
 
@@ -32,7 +32,7 @@ export class Gif implements ICommand {
         }
     }
 
-    public getCommandDetails(): ICommandCategory {
+    public getCommands(): ICommands {
         this.commandDetails = [{
             command: 'gif',
             description: 'A random gif from giphy based on your search term.',
