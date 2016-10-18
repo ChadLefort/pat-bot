@@ -1,17 +1,17 @@
-import { ICommand, ICommands, ICommandDetail, ICommandParameters, IGiphy } from '../../interfaces';
-import Config from '../config';
+import * as Interface from '../../../interfaces';
+import Config from '../../config';
 import * as request from 'request-promise';
 
-export class Gif implements ICommand {
+export class Gif implements Interface.ICommand {
     private static instance: Gif;
     private logger = Config.getInstance().logger;
-    private commandDetails: Array<ICommandDetail>;
+    private commandDetails: Array<Interface.ICommandDetail>;
 
     public static getInstance(): Gif {
         return this.instance || (this.instance = new Gif());
     }
 
-    public async execute(params: ICommandParameters): Promise<void> {
+    public async execute(params: Interface.ICommandParameters): Promise<void> {
         const options = {
             json: true,
             qs: {
@@ -25,14 +25,14 @@ export class Gif implements ICommand {
         };
 
         try {
-            let results: IGiphy = await request(options);
+            let results: Interface.IGiphy = await request(options);
             params.msg.channel.sendFile(results.data.image_original_url);
         } catch (error) {
             this.logger.error(error);
         }
     }
 
-    public getCommands(): ICommands {
+    public getCommands(): Interface.ICommands {
         this.commandDetails = [{
             command: 'gif',
             description: 'A random gif from giphy based on your search term.',

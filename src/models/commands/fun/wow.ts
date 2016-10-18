@@ -1,16 +1,16 @@
-import { getImage } from '../../helpers';
-import { ICommand, ICommands, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
+import { getImage } from '../../../helpers';
+import * as Interface from '../../../interfaces';
 import * as _ from 'lodash';
 
-export class Wow implements ICommand {
+export class Wow implements Interface.ICommand {
     private static instance: Wow;
-    private commandDetails: Array<ICommandDetail>;
+    private commandDetails: Array<Interface.ICommandDetail>;
 
     public static getInstance(): Wow {
         return this.instance || (this.instance = new Wow());
     }
 
-    public execute(params: ICommandParameters): void {
+    public execute(params: Interface.ICommandParameters): void {
         if (params.processedCommand.parameter === 'citizens') {
             if (params.msg.channel.type === 'text') {
                 params.msg.channel.sendMessage(this.citizens(params.msg.guild.name), { disable_everyone: false });
@@ -36,14 +36,14 @@ Cold logic deemed our world not worth saving. Cold logic, however, does not acco
         return rhonin;
     }
 
-    public getCommands(images: Array<IImage>): ICommands {
+    public getCommands(images: Array<Interface.IImage>): Interface.ICommands {
         this.commandDetails = [{
             command: 'wow',
             description: 'Rhonin has something to tell you!',
             parameters: ['citizens'],
         }];
 
-        _.forEach(images, (image: IImage) => {
+        _.forEach(_.filter(images, { folder: 'wow' }), (image: Interface.IImage) => {
             this.commandDetails.push(
                 {
                     command: image.folder,

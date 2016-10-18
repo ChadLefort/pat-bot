@@ -1,15 +1,15 @@
-import { ICommand, ICommands, ICommandDetail, ICommandParameters } from '../../interfaces';
+import * as Interface from '../../../interfaces';
 import * as _ from 'lodash';
 
-export class Roll implements ICommand {
+export class Roll implements Interface.ICommand {
     private static instance: Roll;
-    private commandDetails: Array<ICommandDetail>;
+    private commandDetails: Array<Interface.ICommandDetail>;
 
     public static getInstance(): Roll {
         return this.instance || (this.instance = new Roll());
     }
 
-    public execute(params: ICommandParameters): void {
+    public execute(params: Interface.ICommandParameters): void {
         let maxRoll = 100;
         let parameter = parseInt(params.processedCommand.parameter, 10);
 
@@ -20,7 +20,7 @@ export class Roll implements ICommand {
         params.msg.channel.sendMessage(_.random(1, maxRoll));
     }
 
-    public getCommands(): ICommands {
+    public getCommands(): Interface.ICommands {
         this.commandDetails = [{
             command: 'roll',
             description: 'Roll a random number between 1 and 100!',

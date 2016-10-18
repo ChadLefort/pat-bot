@@ -11,7 +11,14 @@ export interface ICommands {
     category: string;
 }
 
+export interface ICommandAndCategory {
+    command: string;
+    category: string;
+}
+
 export interface ICommand {
     execute(params: ICommandParameters): void | Promise<void>;
+    // TODO: Make all of these return a promise so we don't need to pass in
+    // any parameters.
     getCommands(images?: Array<IImage>): ICommands;
 }

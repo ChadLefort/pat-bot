@@ -1,20 +1,20 @@
-import { getImage } from '../../helpers';
-import { ICommand, ICommands, ICommandDetail, ICommandParameters, IImage } from '../../interfaces';
-import Commands from '../commands';
-import Config from '../config';
+import { getImage } from '../../../helpers';
+import * as Interface from '../../../interfaces';
+import Commands from '../../commands';
+import Config from '../../config';
 import * as _ from 'lodash';
 
-export class Pat implements ICommand {
+export class Pat implements Interface.ICommand {
     private static instance: Pat;
     private logger = Config.getInstance().logger;
-    private commandDetails: Array<ICommandDetail>;
-    private images: Array<IImage> = [];
+    private commandDetails: Array<Interface.ICommandDetail>;
+    private images: Array<Interface.IImage> = [];
 
     public static getInstance(): Pat {
         return this.instance || (this.instance = new Pat());
     }
 
-    public execute(params: ICommandParameters): void {
+    public execute(params: Interface.ICommandParameters): void {
         try {
             this.images = _.filter(Commands.getInstance().images, { folder: 'pat' });
 
@@ -34,13 +34,13 @@ export class Pat implements ICommand {
         }
     }
 
-    public getCommands(images: Array<IImage>): ICommands {
+    public getCommands(images: Array<Interface.IImage>): Interface.ICommands {
         this.commandDetails = [{
             command: 'pat',
             description: 'Meow!!!',
         }];
 
-        _.forEach(images, (image: IImage) => {
+        _.forEach(_.filter(images, { folder: 'pat' }), (image: Interface.IImage) => {
             this.commandDetails.push(
                 {
                     command: image.folder,

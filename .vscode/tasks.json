@@ -31,10 +31,12 @@
       "taskName": "deploy"
     },
     {
-      "taskName": "watch"
+      "taskName": "watch",
+      "isWatching": true
     },
     {
-      "taskName": "watch:test"
+      "taskName": "watch:test",
+      "isWatching": true
     }
   ]
 }
