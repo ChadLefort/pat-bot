@@ -34,7 +34,7 @@ export class Pat implements Interface.ICommand {
         }
     }
 
-    public getCommands(images: Array<Interface.IImage>): Interface.ICommands {
+    public async getCommands(images: Array<Interface.IImage>): Promise<Interface.ICommands> {
         this.commandDetails = [{
             command: 'pat',
             description: 'Meow!!!',

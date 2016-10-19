@@ -45,7 +45,7 @@ export class Help implements Interface.ICommand {
         }
     }
 
-    public getCommands(): Interface.ICommands {
+    public async getCommands(): Promise<Interface.ICommands> {
         this.commandDetails = [{
             command: 'help',
             description: 'List all commands.',

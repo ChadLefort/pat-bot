@@ -27,7 +27,7 @@ export default class Commands {
         }
     }
 
-    private getImages(): Promise<Array<Interface.IImage>> {
+    public getImages(): Promise<Array<Interface.IImage>> {
         let promise = new Promise((resolve, reject) => {
             glob('**/*+(*.jpg|*.png|*.gif)', { cwd: './assets/img/' }, (error, files) => {
                 let images: Array<Interface.IImage> = [];
@@ -50,37 +50,34 @@ export default class Commands {
         return promise;
     }
 
-    public getCommandsGrouped(): Promise<Array<Interface.ICommands>> {
-        let promise = new Promise((resolve, reject) => {
-            this.getMainCommands().then(mainCommands => {
-                let commandsGrouped: Array<Interface.ICommands> = [];
+    public async getCommandsGrouped(): Promise<Array<Interface.ICommands>> {
+        let mainCommands = await this.getMainCommands();
+        let commandsGrouped: Array<Interface.ICommands> = [];
 
-                _.forEach(mainCommands, mainCommand => {
-                    let className = getClassName(mainCommand.command);
-                    commandsGrouped.push(InstanceLoader.getInstance<Interface.ICommand>(className).getCommands(this.images))
-                });
-
-                let results = _.chain(commandsGrouped)
-                    .groupBy('category')
-                    .map((value: any, key: any) => {
-                        return {
-                            category: key,
-                            commandDetails: <Array<Interface.ICommandDetail>>_.flatten(_.map(value, 'commandDetails')),
-                        };
-                    })
-                    .forEach(commands => {
-                        _.chain(commands.commandDetails)
-                            .orderBy('command', 'asc')
-                            .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
-                            .value();
-                    })
-                    .value();
-
-                resolve(results);
-            });
+        let promise = _.forEach(mainCommands, async (mainCommand) => {
+            let className = getClassName(mainCommand.command);
+            commandsGrouped.push(await InstanceLoader.getInstance<Interface.ICommand>(className).getCommands(this.images));
         });
 
-        return promise;
+        await Promise.all(promise);
+
+        let results = _.chain(commandsGrouped)
+            .groupBy('category')
+            .map((value: any, key: any) => {
+                return {
+                    category: key,
+                    commandDetails: <Array<Interface.ICommandDetail>>_.flatten(_.map(value, 'commandDetails')),
+                };
+            })
+            .forEach(commands => {
+                _.chain(commands.commandDetails)
+                    .orderBy('command', 'asc')
+                    .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
+                    .value();
+            })
+            .value();
+
+        return results;
     }
 
     public getMainCommands(): Promise<Array<Interface.ICommandAndCategory>> {

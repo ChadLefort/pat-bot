@@ -36,7 +36,7 @@ Cold logic deemed our world not worth saving. Cold logic, however, does not acco
         return rhonin;
     }
 
-    public getCommands(images: Array<Interface.IImage>): Interface.ICommands {
+    public async getCommands(images: Array<Interface.IImage>): Promise<Interface.ICommands> {
         this.commandDetails = [{
             command: 'wow',
             description: 'Rhonin has something to tell you!',

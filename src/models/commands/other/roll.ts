@@ -20,7 +20,7 @@ export class Roll implements Interface.ICommand {
         params.msg.channel.sendMessage(_.random(1, maxRoll));
     }
 
-    public getCommands(): Interface.ICommands {
+    public async getCommands(): Promise<Interface.ICommands> {
         this.commandDetails = [{
             command: 'roll',
             description: 'Roll a random number between 1 and 100!',

@@ -32,7 +32,7 @@ export class Gif implements Interface.ICommand {
         }
     }
 
-    public getCommands(): Interface.ICommands {
+    public async getCommands(): Promise<Interface.ICommands> {
         this.commandDetails = [{
             command: 'gif',
             description: 'A random gif from giphy based on your search term.',
