@@ -2,6 +2,7 @@ import { getClassName } from '../helpers';
 import * as Interface from '../interfaces';
 import Config from './config';
 import InstanceLoader from './instance-loader';
+import * as aws from 'aws-sdk';
 import * as glob from 'glob';
 import * as _ from 'lodash';
 
@@ -65,8 +66,17 @@ export default class Commands {
 
     public getImages(): Promise<Array<Interface.IImage>> {
         return new Promise((resolve, reject) => {
-            glob('**/*+(*.jpg|*.png|*.gif)', { cwd: './assets/img/' }, (error, files) => {
+            const s3 = new aws.S3();
+            const params = {
+                Bucket: process.env.AWS_BUCKET,
+                Prefix: process.env.AWS_BUCKET_PATH,
+            };
+
+            s3.listObjects(params, (error, data) => {
+                let files: Array<string> = [];
                 let images: Array<Interface.IImage> = [];
+
+                _.forEach(data.Contents, content => files.push(content.Key.replace(process.env.AWS_BUCKET_PATH, '')));
 
                 _.forEach(files, file => {
                     let filePath = file.split('.')[0].split('/');

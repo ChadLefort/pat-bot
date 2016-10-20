@@ -10,7 +10,7 @@ export async function getImage(params: ICommandParameters): Promise<void> {
 
     if (image) {
         if (params.msg.content.startsWith(`${prefix}${image.folder} ${image.fileName}`)) {
-            params.msg.channel.sendFile(`./assets/img/${image.folder}/${image.fileName}.${image.ext}`);
+            params.msg.channel.sendFile(`${process.env.AWS_BUCKET_URL}/${image.folder}/${image.fileName}.${image.ext}`);
         }
     }
 }
