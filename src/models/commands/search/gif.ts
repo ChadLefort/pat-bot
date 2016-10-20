@@ -12,19 +12,18 @@ export class Gif implements Interface.ICommand {
     }
 
     public async execute(params: Interface.ICommandParameters): Promise<void> {
-        const options = {
-            json: true,
-            qs: {
-                api_key: process.env.GIPHY_KEY,
-                format: 'json',
-                limit: 1,
-                rating: 'r',
-                tag: params.processedCommand.parameter,
-            },
-            url: `http://api.giphy.com/v1/gifs/random`,
-        };
-
         try {
+            const options = {
+                json: true,
+                qs: {
+                    api_key: process.env.GIPHY_KEY,
+                    format: 'json',
+                    limit: 1,
+                    rating: 'r',
+                    tag: params.processedCommand.parameter,
+                },
+                url: `http://api.giphy.com/v1/gifs/random`,
+            };
             let results: Interface.IGiphy = await request(options);
             params.msg.channel.sendFile(results.data.image_original_url);
         } catch (error) {

@@ -1,8 +1,10 @@
 import * as Interface from '../../../interfaces';
+import Config from '../../models/../config';
 import * as _ from 'lodash';
 
 export class Roll implements Interface.ICommand {
     private static instance: Roll;
+    private logger = Config.getInstance().logger;
     private commandDetails: Array<Interface.ICommandDetail>;
 
     public static getInstance(): Roll {
@@ -10,14 +12,18 @@ export class Roll implements Interface.ICommand {
     }
 
     public execute(params: Interface.ICommandParameters): void {
-        let maxRoll = 100;
-        let parameter = parseInt(params.processedCommand.parameter, 10);
+        try {
+            const parameter = parseInt(params.processedCommand.parameter, 10);
+            let maxRoll = 100;
 
-        if (_.isNumber(parameter) && parameter > 1) {
-            maxRoll = parameter;
+            if (_.isNumber(parameter) && parameter > 1) {
+                maxRoll = parameter;
+            }
+
+            params.msg.channel.sendMessage(_.random(1, maxRoll));
+        } catch (error) {
+            this.logger.error(error);
         }
-
-        params.msg.channel.sendMessage(_.random(1, maxRoll));
     }
 
     public async getCommands(): Promise<Interface.ICommands> {

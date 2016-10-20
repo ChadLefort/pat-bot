@@ -1,4 +1,4 @@
-import { ICommandParameters, IImage } from './pat-bot';
+import { ICommandParameters } from './pat-bot';
 
 export interface ICommandDetail {
     command: string;
@@ -18,7 +18,5 @@ export interface ICommandAndCategory {
 
 export interface ICommand {
     execute(params: ICommandParameters): void | Promise<void>;
-    // TODO: Make all of these return a promise so we don't need to pass in
-    // any parameters.
-    getCommands(images?: Array<IImage>): Promise<ICommands>;
+    getCommands(): Promise<ICommands>;
 }

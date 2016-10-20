@@ -20,21 +20,21 @@ export default class PatBot {
     public async execute(): Promise<void> {
         try {
             this.mainCommands = await Commands.getInstance().getMainCommands();
+
+            this.client.on('ready', () => {
+                this.logger.info('Meow! I am ready for commands!');
+            });
+
+            this.client.on('message', msg => {
+                this.handleCommand(msg);
+            });
+
+            this.client.on('error', error => {
+                this.logger.error(error.message);
+            });
         } catch (error) {
             this.logger.error(error);
         }
-
-        this.client.on('ready', () => {
-            this.logger.info('Meow! I am ready for commands!');
-        });
-
-        this.client.on('message', msg => {
-            this.handleCommand(msg);
-        });
-
-        this.client.on('error', error => {
-            this.logger.error(error.message);
-        });
     }
 
     private handleCommand(msg: Discord.Message): void {
@@ -43,13 +43,13 @@ export default class PatBot {
         }
 
         msg.content = msg.content.toLowerCase();
-        let processedCommand = this.processCommand(msg.content);
+        const processedCommand = this.processCommand(msg.content);
 
         if (!processedCommand.command) {
             return;
         }
 
-        let params: Interface.ICommandParameters = {
+        const params: Interface.ICommandParameters = {
             msg: msg,
             processedCommand: processedCommand,
         };
@@ -58,9 +58,9 @@ export default class PatBot {
     }
 
     private processCommand(msg: string): Interface.IProssedCommand {
-        let [command, ...parameter] = _.chain(msg).replace('!', '').split(' ').value();
-        let parameterJoin = _.join(parameter, ' ');
-        let mainCommand = _.find(this.mainCommands, { command: command });
+        const [command, ...parameter] = _.chain(msg).replace('!', '').split(' ').value();
+        const parameterJoin = _.join(parameter, ' ');
+        const mainCommand = _.find(this.mainCommands, { command: command });
 
         return {
             className: getClassName(command),

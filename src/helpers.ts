@@ -4,24 +4,19 @@ import Config from './models/config';
 import * as _ from 'lodash';
 
 export async function getImage(params: ICommandParameters): Promise<void> {
-    let prefix = Config.getInstance().prefix;
-    let logger = Config.getInstance().logger;
-    let images = Commands.getInstance().images;
-    let image = _.find(images, { fileName: params.processedCommand.parameter });
+    const prefix = Config.getInstance().prefix;
+    const images = await Commands.getInstance().getImages();
+    const image = _.find(images, { fileName: params.processedCommand.parameter, folder: params.processedCommand.command });
 
     if (image) {
         if (params.msg.content.startsWith(`${prefix}${image.folder} ${image.fileName}`)) {
-            try {
-                await params.msg.channel.sendFile(`./assets/img/${image.folder}/${image.fileName}.${image.ext}`);
-            } catch (error) {
-                logger.error(error);
-            }
+            params.msg.channel.sendFile(`./assets/img/${image.folder}/${image.fileName}.${image.ext}`);
         }
     }
 }
 
 export function validateParameter(commandsGrouped: Array<ICommands>, category: string, params: ICommandParameters): boolean {
-    let parameters = _.chain(commandsGrouped)
+    const parameters = _.chain(commandsGrouped)
         .filter({ category: category })
         .map(value => _.map(value.commandDetails, 'parameters'))
         .flattenDeep()
