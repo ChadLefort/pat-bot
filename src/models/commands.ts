@@ -34,7 +34,6 @@ export default class Commands {
             })
             .forEach(commands => {
                 _.chain(commands.commandDetails)
-                    .orderBy('command', 'asc')
                     .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
                     .value();
             })

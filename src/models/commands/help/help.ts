@@ -17,7 +17,6 @@ export class Help implements Interface.ICommand {
         try {
             const commandsGrouped = await Commands.getInstance().getCommandsGrouped();
             let filtered = _.filter(commandsGrouped, { category: params.processedCommand.parameter });
-            let help: Array<string> = [];
 
             if (!validateParameter(commandsGrouped, 'help', params)) {
                 return;
@@ -27,19 +26,13 @@ export class Help implements Interface.ICommand {
                 filtered = _.filter(commandsGrouped, { category: 'help' });
             }
 
-            _.forEach(filtered, value => {
-                _.forEach(value.commandDetails, commandDetail => {
-                    if (_.isUndefined(commandDetail.parameters)) {
-                        help.push(`command: ${commandDetail.command}`);
-                    } else {
-                        _.forEach(commandDetail.parameters, parameter => {
-                            help.push(`command: ${commandDetail.command} ${parameter}`);
-                        });
-                    }
-                });
-            });
-
-            params.msg.channel.sendMessage('```' + help.join('\n') + '```');
+            if (params.processedCommand.parameter === 'all') {
+                const help = this.getHelp(commandsGrouped);
+                params.msg.author.sendMessage('```' + help.join('\n') + '```');
+            } else {
+                const help = this.getHelp(filtered);
+                params.msg.channel.sendMessage('```' + help.join('\n') + '```');
+            }
         } catch (error) {
             this.logger.error(error);
         }
@@ -68,5 +61,23 @@ export class Help implements Interface.ICommand {
             category: 'help',
             commandDetails: this.commandDetails,
         };
+    }
+
+    private getHelp(commands: Array<Interface.ICommands>): Array<string> {
+        let help: Array<string> = [];
+
+        _.forEach(commands, value => {
+            _.forEach(value.commandDetails, commandDetail => {
+                if (_.isUndefined(commandDetail.parameters)) {
+                    help.push(`command: ${commandDetail.command}`);
+                } else {
+                    _.forEach(commandDetail.parameters, parameter => {
+                        help.push(`command: ${commandDetail.command} ${parameter}`);
+                    });
+                }
+            });
+        });
+
+        return _.sortBy(help);
     }
 }
