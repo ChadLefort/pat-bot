@@ -27,7 +27,7 @@ export class Bot implements Interface.ICommand {
                     break;
                 case 'uptime':
                     const uptime = moment.duration(process.uptime(), 'seconds');
-                    params.msg.channel.sendMessage(`I have been alive for ${uptime.days()} days, ${uptime.hours()} hours, and ${uptime.seconds()} seconds.`);
+                    params.msg.channel.sendMessage(`I have been alive for ${uptime.days()} days, ${uptime.hours()} hours, ${uptime.minutes()} minutes, and ${uptime.seconds()} seconds.`);
                     break;
                 default:
                     break;
