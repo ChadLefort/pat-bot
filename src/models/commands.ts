@@ -95,8 +95,9 @@ export default class Commands {
     }
 }
 
-export { Gif } from './commands/search/gif';
-export { Help } from './commands/help/help';
 export { Pat } from './commands/fun/pat';
-export { Roll } from './commands/other/roll';
 export { Wow } from './commands/fun/wow';
+export { Help } from './commands/help/help';
+export { Gif } from './commands/search/gif';
+export { Bot } from './commands/info/bot';
+export { Roll } from './commands/other/roll';

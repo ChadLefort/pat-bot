@@ -43,18 +43,20 @@ export class Help implements Interface.ICommand {
 
         this.commandDetails = [{
             command: 'help',
-            description: 'List all commands.',
+            description: 'List all commands in a direct message.',
             parameters: ['all'],
         }];
 
         _.chain(mainCommands).map('category').uniq().value().forEach(category => {
-            this.commandDetails.push(
-                {
-                    command: 'help',
-                    description: `All of the commands in the ${category} category.`,
-                    parameters: [<string>category],
-                }
-            );
+            if (category !== 'help') {
+                this.commandDetails.push(
+                    {
+                        command: 'help',
+                        description: `All of the commands in the ${category} category.`,
+                        parameters: [<string>category],
+                    }
+                );
+            }
         });
 
         return {

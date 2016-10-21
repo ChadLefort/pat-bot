@@ -29,10 +29,10 @@ export class Roll implements Interface.ICommand {
     public async getCommands(): Promise<Interface.ICommands> {
         this.commandDetails = [{
             command: 'roll',
-            description: 'Roll a random number between 1 and 100!',
+            description: 'Roll a random number between 1 and 100.',
         }, {
             command: 'roll',
-            description: 'Roll a random number between 1 and a number of your choosing!',
+            description: 'Roll a random number between 1 and a number of your choosing.',
             parameters: ['number'],
         }];
 

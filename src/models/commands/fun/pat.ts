@@ -36,14 +36,14 @@ export class Pat implements Interface.ICommand {
 
         this.commandDetails = [{
             command: 'pat',
-            description: 'Meow!!!',
+            description: 'She meows.',
         }];
 
         _.forEach(_.filter(images, { folder: 'pat' }), (image: Interface.IImage) => {
             this.commandDetails.push(
                 {
                     command: image.folder,
-                    description: 'An image of Pat!',
+                    description: 'An image of Pat.',
                     parameters: [image.fileName],
                 }
             );

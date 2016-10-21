@@ -40,7 +40,7 @@ export class Wow implements Interface.ICommand {
 
         this.commandDetails = [{
             command: 'wow',
-            description: 'Rhonin has something to tell you!',
+            description: 'Rhonin has something to tell you.',
             parameters: ['citizens'],
         }];
 
