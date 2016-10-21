@@ -1,3 +1,4 @@
+import { getClassName } from '../helpers';
 import * as Interface from '../interfaces';
 import Commands from './commands';
 import Config from './config';
@@ -9,7 +10,7 @@ export default class PatBot {
     private prefix = Config.getInstance().prefix;
     private logger = Config.getInstance().logger;
     private client: Discord.Client;
-    private mainCommands: Array<string> = [];
+    private mainCommands: Array<Interface.ICommandAndCategory> = [];
 
     constructor(private token: string) {
         this.client = new Discord.Client();
@@ -19,21 +20,21 @@ export default class PatBot {
     public async execute(): Promise<void> {
         try {
             this.mainCommands = await Commands.getInstance().getMainCommands();
+
+            this.client.on('ready', () => {
+                this.logger.info('Meow! I am ready for commands!');
+            });
+
+            this.client.on('message', msg => {
+                this.handleCommand(msg);
+            });
+
+            this.client.on('error', error => {
+                this.logger.error(error.message);
+            });
         } catch (error) {
             this.logger.error(error);
         }
-
-        this.client.on('ready', () => {
-            this.logger.info('Meow! I am ready for commands!');
-        });
-
-        this.client.on('message', msg => {
-            this.handleCommand(msg);
-        });
-
-        this.client.on('error', error => {
-            this.logger.error(error.message);
-        });
     }
 
     private handleCommand(msg: Discord.Message): void {
@@ -42,13 +43,13 @@ export default class PatBot {
         }
 
         msg.content = msg.content.toLowerCase();
-        let processedCommand = this.processCommand(msg.content);
+        const processedCommand = this.processCommand(msg.content);
 
         if (!processedCommand.command) {
             return;
         }
 
-        let params: Interface.ICommandParameters = {
+        const params: Interface.ICommandParameters = {
             msg: msg,
             processedCommand: processedCommand,
         };
@@ -57,12 +58,13 @@ export default class PatBot {
     }
 
     private processCommand(msg: string): Interface.IProssedCommand {
-        let [command, ...parameter] = _.chain(msg).replace('!', '').split(' ').value();
-        let parameterJoin = _.join(parameter, ' ');
+        const [command, ...parameter] = _.chain(msg).replace('!', '').split(' ').value();
+        const parameterJoin = _.join(parameter, ' ');
+        const mainCommand = _.find(this.mainCommands, { command: command });
 
         return {
-            className: _.chain(_.split(command, '-')).map((value: string) => _.capitalize(value)).join('').value(),
-            command: this.mainCommands[_.indexOf(this.mainCommands, command)],
+            className: getClassName(command),
+            command: !_.isUndefined(mainCommand) ? mainCommand.command : undefined,
             parameter: _.isEmpty(parameterJoin) ? null : parameterJoin,
         };
     }

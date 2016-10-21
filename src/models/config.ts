@@ -4,14 +4,17 @@ import * as winston from 'winston';
 
 export default class Config {
     private static instance: Config;
+    private logDir: string;
     public prefix: string;
     public token: string;
     public logger: winston.LoggerInstance;
 
     private constructor() {
+        this.logDir = 'log';
         this.prefix = '!';
         this.token = process.env.DISCORD_TOKEN;
         this.logger = this.getLogger();
+        this.mkDir(this.logDir);
     }
 
     public static getInstance(): Config {
@@ -20,7 +23,6 @@ export default class Config {
 
     public getLogger(): winston.LoggerInstance {
         const env = process.env.NODE_ENV || 'development';
-        const logDir = 'log';
         const logger = new (winston.Logger)({
             transports: [
                 new (winston.transports.Console)({
@@ -29,7 +31,7 @@ export default class Config {
                     timestamp: () => (new Date()).toLocaleTimeString(),
                 }),
                 new (winston.transports.File)({
-                    filename: `${logDir}/winston.log`,
+                    filename: `${this.logDir}/winston.log`,
                     handleExceptions: true,
                     humanReadableUnhandledException: true,
                     json: false,
@@ -39,21 +41,18 @@ export default class Config {
             ],
         });
 
-        this.mkDir(logDir);
-
         return logger;
     }
 
-    public startPM2() {
-        let maxMemory = process.env.WEB_MEMORY || 256;
-        const logDir = 'log';
+    public startPM2(): void {
+        const maxMemory = process.env.WEB_MEMORY || 256;
 
         pm2.connect(() => {
             pm2.start({
                 env: { NODE_ENV: process.env.NODE_ENV },
                 exec_mode: 'cluster',
                 log_date_fomrat: 'YYYY-MM-DD HH:mm Z',
-                log_file: `${logDir}/pm2.log`,
+                log_file: `${this.logDir}/pm2.log`,
                 max_memory_restart: maxMemory + 'M',
                 merge_logs: true,
                 name: 'pat-bot',
@@ -62,11 +61,9 @@ export default class Config {
                 pm2.interact(process.env.KEYMETRICS_PRIVATE, process.env.KEYMETRICS_PUBLIC, 'dokku');
             });
         });
-
-        this.mkDir(logDir);
     }
 
-    private mkDir(dir: string) {
+    private mkDir(dir: string): void {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir);
         }

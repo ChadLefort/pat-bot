@@ -1,36 +1,82 @@
+import { getClassName } from '../helpers';
 import * as Interface from '../interfaces';
 import Config from './config';
 import InstanceLoader from './instance-loader';
+import * as aws from 'aws-sdk';
 import * as glob from 'glob';
 import * as _ from 'lodash';
-import * as path from 'path';
 
 export default class Commands {
     private static instance: Commands;
     private prefix = Config.getInstance().prefix;
     private logger = Config.getInstance().logger;
-    public images: Array<Interface.IImage> = [];
-
-    private constructor() {
-        this.execute();
-    }
 
     public static getInstance(): Commands {
         return this.instance || (this.instance = new Commands());
     }
 
-    private async execute(): Promise<void> {
-        try {
-            this.images = await this.getImages();
-        } catch (error) {
-            this.logger.error(error);
-        }
+    public async getCommandsGrouped(): Promise<Array<Interface.ICommands>> {
+        let commandsGrouped: Array<Interface.ICommands> = [];
+        const mainCommands = await this.getMainCommands();
+        const promises = _.map(mainCommands, async (mainCommand) => {
+            let className = getClassName(mainCommand.command);
+            commandsGrouped.push(await InstanceLoader.getInstance<Interface.ICommand>(className).getCommands());
+        });
+
+        await Promise.all(promises);
+
+        return _.chain(commandsGrouped)
+            .groupBy('category')
+            .map((value: any, key: any) => {
+                return {
+                    category: key,
+                    commandDetails: <Array<Interface.ICommandDetail>>_.flatten(_.map(value, 'commandDetails')),
+                };
+            })
+            .forEach(commands => {
+                _.chain(commands.commandDetails)
+                    .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
+                    .value();
+            })
+            .value();
     }
 
-    private getImages(): Promise<Array<Interface.IImage>> {
-        let promise = new Promise((resolve, reject) => {
-            glob('**/*+(*.jpg|*.png|*.gif)', { cwd: './assets/img/' }, (error, files) => {
+    public getMainCommands(): Promise<Array<Interface.ICommandAndCategory>> {
+        return new Promise((resolve, reject) => {
+            glob('**/*.ts', { cwd: './src/models/commands/' }, (error, files) => {
+                let mainCommands: Array<Interface.ICommandAndCategory> = [];
+
+                _.forEach(files, file => {
+                    let filePath = file.split('.')[0].split('/');
+                    if (!_.isUndefined(filePath[1])) {
+                        mainCommands.push({ category: filePath[0], command: filePath[1] });
+                    }
+                });
+
+                if (error) {
+                    reject(error);
+                    this.logger.error(error.message);
+                    return;
+                } else {
+                    resolve(mainCommands);
+                }
+            });
+        });
+    }
+
+    public getImages(): Promise<Array<Interface.IImage>> {
+        return new Promise((resolve, reject) => {
+            const s3 = new aws.S3();
+            const params = {
+                Bucket: process.env.AWS_BUCKET,
+                Prefix: process.env.AWS_BUCKET_PATH,
+            };
+
+            s3.listObjects(params, (error, data) => {
+                let files: Array<string> = [];
                 let images: Array<Interface.IImage> = [];
+
+                _.forEach(data.Contents, content => files.push(content.Key.replace(process.env.AWS_BUCKET_PATH, '')));
 
                 _.forEach(files, file => {
                     let filePath = file.split('.')[0].split('/');
@@ -46,60 +92,12 @@ export default class Commands {
                 }
             });
         });
-
-        return promise;
-    }
-
-    public getCommandDetails(): Promise<Array<Interface.ICommandDetail>> {
-        let promise = new Promise((resolve, reject) => {
-            this.getMainCommands().then(mainCommands => {
-                let commandDetails: Array<Interface.ICommandDetail> = [];
-
-                _.forEach(mainCommands, mainCommand => {
-                    let className = _.chain(_.split(mainCommand, '-')).map((value: string) => _.capitalize(value)).join('').value();
-
-                    _.forEach(InstanceLoader.getInstance<Interface.ICommand>(className).getCommandDetails(this.images), commandDetail => {
-                        commandDetails.push(commandDetail);
-                    });
-                });
-
-                let results = _.chain(commandDetails)
-                    .orderBy('command', 'asc')
-                    .forEach(commandDetail => commandDetail.command = this.prefix + commandDetail.command)
-                    .value();
-
-                resolve(results);
-            });
-        });
-
-        return promise;
-    }
-
-    public getMainCommands(): Promise<Array<string>> {
-        let promise = new Promise((resolve, reject) => {
-            glob('**/*.ts', { cwd: './src/models/commands/' }, (error, files) => {
-                let mainCommands: Array<string> = [];
-
-                _.forEach(files, file => {
-                    mainCommands.push(path.basename(file, path.extname(file)));
-                });
-
-                if (error) {
-                    reject(error);
-                    this.logger.error(error.message);
-                    return;
-                } else {
-                    resolve(mainCommands);
-                }
-            });
-        });
-
-        return promise;
     }
 }
 
-export { Gif } from './commands/gif';
-export { Help } from './commands/help';
-export { Pat } from './commands/pat';
-export { Roll } from './commands/roll';
-export { Silly } from './commands/silly';
+export { Pat } from './commands/fun/pat';
+export { Wow } from './commands/fun/wow';
+export { Help } from './commands/help/help';
+export { Gif } from './commands/search/gif';
+export { Bot } from './commands/info/bot';
+export { Roll } from './commands/other/roll';

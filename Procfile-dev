@@ -1,1 +1,1 @@
-worker: ts-node src/index.ts
+worker: nodemon --debug lib/index.js

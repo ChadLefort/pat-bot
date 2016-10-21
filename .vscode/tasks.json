@@ -2,7 +2,9 @@
   "version": "0.1.0",
   "command": "npm",
   "isShellCommand": true,
-  "args": ["run"],
+  "args": [
+    "run"
+  ],
   "showOutput": "always",
   "tasks": [
     {
@@ -18,6 +20,23 @@
     {
       "taskName": "test",
       "isTestCommand": true
+    },
+    {
+      "taskName": "start"
+    },
+    {
+      "taskName": "start:dev"
+    },
+    {
+      "taskName": "deploy"
+    },
+    {
+      "taskName": "watch",
+      "isWatching": true
+    },
+    {
+      "taskName": "watch:test",
+      "isWatching": true
     }
   ]
 }

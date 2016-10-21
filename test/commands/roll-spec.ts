@@ -1,4 +1,4 @@
-import { Roll } from '../../src/models/commands/roll';
+import { Roll } from '../../src/models/commands/other/roll';
 import * as chai from 'chai';
 import 'mocha';
 
@@ -12,8 +12,9 @@ describe('Roll', () => {
     });
 
     it('should return some command details', () => {
-        let commandDetails = roll.getCommandDetails();
-        expect(commandDetails.length).to.be.greaterThan(1);
-        expect(commandDetails[0]).to.include({ command: 'roll' });
+        roll.getCommands().then(command => {
+            expect(command.commandDetails.length).to.be.greaterThan(1);
+            expect(command.commandDetails[0]).to.include({ command: 'roll' });
+        });
     });
 });
