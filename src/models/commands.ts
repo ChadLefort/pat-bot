@@ -20,7 +20,11 @@ export default class Commands {
         const mainCommands = await this.getMainCommands();
         const promises = _.map(mainCommands, async (mainCommand) => {
             let className = getClassName(mainCommand.command);
-            commandsGrouped.push(await InstanceLoader.getInstance<Interface.ICommand>(className).getCommands());
+            try {
+                commandsGrouped.push(await InstanceLoader.getInstance<Interface.ICommand>(className).getCommands());
+            } catch (error) {
+                this.logger.error(error);
+            }
         });
 
         await Promise.all(promises);
@@ -99,5 +103,7 @@ export { Pat } from './commands/fun/pat';
 export { Wow } from './commands/fun/wow';
 export { Help } from './commands/help/help';
 export { Gif } from './commands/search/gif';
+export { Wiki } from './commands/search/wiki';
+export { Youtube } from './commands/search/youtube';
 export { Bot } from './commands/info/bot';
 export { Roll } from './commands/other/roll';
