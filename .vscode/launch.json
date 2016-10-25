@@ -20,14 +20,24 @@
             "type": "node"
         },
         {
-            "name": "ATTACH",
+            "name": "ATTACH BOT",
             "type": "node",
             "request": "attach",
             "port": 5858,
             "restart": false,
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/lib",
-            "localRoot": "${workspaceRoot}/src/"
+            "outDir": "${workspaceRoot}/lib/bot",
+            "localRoot": "${workspaceRoot}/src/bot"
+        },
+        {
+            "name": "ATTACH WEB",
+            "type": "node",
+            "request": "attach",
+            "port": 6868,
+            "restart": false,
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/lib/web",
+            "localRoot": "${workspaceRoot}/src/web"
         }
     ]
 }

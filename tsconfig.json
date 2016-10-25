@@ -12,7 +12,13 @@
     "outDir": "./lib",
     "preserveConstEnums": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "jsx": "react"
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "target": "es5"
   },
   "include": [
     "src/**/*"
@@ -20,5 +26,8 @@
   "exclude": [
     "node_modules",
     "**/*-spec.ts"
+  ],
+  "files": [
+    "./typings/declarations.d.ts"
   ]
 }

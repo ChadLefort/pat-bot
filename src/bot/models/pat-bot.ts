@@ -50,8 +50,8 @@ export default class PatBot {
         }
 
         const params: Interface.ICommandParameters = {
-            msg: msg,
-            processedCommand: processedCommand,
+            msg,
+            processedCommand,
         };
 
         InstanceLoader.getInstance<Interface.ICommand>(processedCommand.className).execute(params);
@@ -60,7 +60,7 @@ export default class PatBot {
     private processCommand(msg: string): Interface.IProssedCommand {
         const [command, ...parameter] = _.chain(msg).replace('!', '').split(' ').value();
         const parameterJoin = _.join(parameter, ' ');
-        const mainCommand = _.find(this.mainCommands, { command: command });
+        const mainCommand = _.find(this.mainCommands, { command });
 
         return {
             className: getClassName(command),

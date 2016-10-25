@@ -47,7 +47,7 @@ export default class Commands {
 
     public getMainCommands(): Promise<Array<Interface.ICommandAndCategory>> {
         return new Promise((resolve, reject) => {
-            glob('**/*.ts', { cwd: './src/models/commands/' }, (error, files) => {
+            glob('**/*.ts', { cwd: './src/bot/models/commands/' }, (error, files) => {
                 let mainCommands: Array<Interface.ICommandAndCategory> = [];
 
                 _.forEach(files, file => {

@@ -1,5 +1,8 @@
 {
-  "extends": "tslint:latest",
+  "extends": [
+    "tslint:latest",
+    "tslint-react"
+  ],
   "rules": {
     "class-name": true,
     "comment-format": [
@@ -22,9 +25,12 @@
     ],
     "quotemark": [
       true,
-      "single"
+      "single",
+      "jsx-double"
     ],
-    "semicolon": [true],
+    "semicolon": [
+      true
+    ],
     "triple-equals": [
       true,
       "allow-null-check"
@@ -51,9 +57,17 @@
       "check-separator",
       "check-type"
     ],
-    "no-console": [false],
-    "max-line-length": [false],
-    "member-ordering": [false],
-    "no-string-literal": false
+    "no-console": [
+      false
+    ],
+    "max-line-length": [
+      false
+    ],
+    "member-ordering": [
+      false
+    ],
+    "no-string-literal": false,
+    "object-literal-sort-keys": false,
+    "no-var-requires": false
   }
 }

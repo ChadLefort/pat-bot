@@ -17,7 +17,7 @@ export async function getImage(params: ICommandParameters): Promise<void> {
 
 export function validateParameter(commandsGrouped: Array<ICommands>, category: string, params: ICommandParameters): boolean {
     const parameters = _.chain(commandsGrouped)
-        .filter({ category: category })
+        .filter({ category })
         .map(value => _.map(value.commandDetails, 'parameters'))
         .flattenDeep()
         .value();

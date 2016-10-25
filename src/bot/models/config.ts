@@ -56,7 +56,7 @@ export default class Config {
                 max_memory_restart: maxMemory + 'M',
                 merge_logs: true,
                 name: 'pat-bot',
-                script: 'lib/index.js',
+                script: 'lib/bot/index.js',
             }, () => {
                 pm2.interact(process.env.KEYMETRICS_PRIVATE, process.env.KEYMETRICS_PUBLIC, 'dokku');
             });
