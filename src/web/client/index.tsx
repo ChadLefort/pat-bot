@@ -1,4 +1,4 @@
-import App from './containers/app';
+import Root from './containers/Root';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -9,14 +9,14 @@ const rootEl = document.getElementById('content');
 
 ReactDOM.render(
     <AppContainer>
-        <App />
+        <Root />
     </AppContainer>,
     rootEl
 );
 
 if (module.hot) {
-    module.hot.accept('./containers/app', () => {
-        const NextApp = require('./containers/app').default;
+    module.hot.accept('./containers/Root', () => {
+        const NextApp = require('./containers/Root').default;
         ReactDOM.render(
             <AppContainer>
                 <NextApp />

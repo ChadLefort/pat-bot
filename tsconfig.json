@@ -5,7 +5,6 @@
       "typings"
     ],
     "target": "es6",
-    "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,

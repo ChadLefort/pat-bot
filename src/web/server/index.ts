@@ -1,4 +1,6 @@
-import './controllers';
+import './controllers/commands';
+import './controllers/index';
+
 import { handlebars } from 'consolidate';
 import * as express from 'express';
 import { registerControllers } from 'giuseppe';

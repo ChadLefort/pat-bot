@@ -5,8 +5,7 @@ import { Controller, Get, Req, Res } from 'giuseppe';
 class IndexController {
 
     @Get()
-    public ping( @Req() req: Request, @Res() res: Response): void {
+    public index( @Req() req: Request, @Res() res: Response): void {
         res.render('index');
     }
 }
-
