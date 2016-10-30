@@ -1,31 +1,54 @@
+import { IAction } from '../../interfaces/actions';
 import { fetchCommands } from './../../actions/commands-actions';
 import * as React from 'react';
 import { Col, Grid, Jumbotron, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 interface IStateProps {
     commands: Array<any>;
 }
 
-function mapStateToProps(state: any): any {
+interface IDispatchProps {
+    fetchCommands(): IAction<any>;
+}
+
+function mapStateToProps(state: any) {
     return {
         commands: state.commands.commands,
     };
 }
 
-class CommandsPage extends React.Component<any, any> {
+function mapDispatchToProps(dispatch: any) {
+    return bindActionCreators({ fetchCommands }, dispatch)
+}
+
+const CommandsRow = (props: any) => {
+    return (
+        <ul>{props.details.map((item: any, key: number) => <li key={key}>{item.command} {item.parameters}</li>)}</ul>
+    );
+};
+
+
+const CommandsCategory = (props: any) => {
+    return (
+        <div>
+            <h3>{props.header}</h3>
+            <CommandsRow details={props.details} />
+        </div>
+    );
+};
+
+class CommandsPage extends React.Component<IStateProps & IDispatchProps, any> {
 
     public componentWillMount() {
-        this.props.dispatch(fetchCommands());
+        this.props.fetchCommands();
     }
 
     public render() {
         const { commands } = this.props;
-        const mappedCommands = commands.map((command: any) =>
-            <div>
-                <h3>{command.category}</h3>
-                <ul>{command.commandDetails.map((item: any) => <li>{item.command} {item.parameters}</li>)}</ul>
-            </div>
+        const mappedCommands = commands.map((command: any, key: number) =>
+            <CommandsCategory header={command.category} details={command.commandDetails} key={key} />
         );
 
         return (
@@ -51,4 +74,4 @@ class CommandsPage extends React.Component<any, any> {
     }
 }
 
-export default connect(mapStateToProps)(CommandsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CommandsPage);

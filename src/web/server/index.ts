@@ -28,6 +28,7 @@ if (process.env.NODE_ENV === 'development') {
         log: console.log,
     }));
 } else {
+    // TODO: Fix this issue.
     app.use('/public', express.static(path.join(__dirname, '../../lib/public')));
 }
 

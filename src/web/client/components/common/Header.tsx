@@ -1,17 +1,14 @@
 import './_header.scss';
 import * as React from 'react';
 import { Nav, NavItem, Navbar } from 'react-bootstrap';
+import { Link } from 'react-router';
 import { IndexLinkContainer, LinkContainer } from 'react-router-bootstrap';
 
 const Header = () => {
     return (
         <Navbar>
             <Navbar.Header>
-                <Navbar.Brand>
-                    <IndexLinkContainer to="/">
-                        <a>Pat Bot</a>
-                    </IndexLinkContainer>
-                </Navbar.Brand>
+                <Link to="/" className="navbar-brand">Pat Bot</Link>
                 <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
