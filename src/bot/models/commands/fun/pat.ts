@@ -1,6 +1,6 @@
 import { getImage, validateParameter } from '../../../helpers';
 import * as Interface from '../../../interfaces';
-import Commands from '../../commands';
+import CommandHandler from '../../command-handler';
 import Config from '../../config';
 import * as _ from 'lodash';
 
@@ -15,7 +15,7 @@ export class Pat implements Interface.ICommand {
 
     public async execute(params: Interface.ICommandParameters): Promise<void> {
         try {
-            const commandsGrouped = await Commands.getInstance().getCommandsGrouped();
+            const commandsGrouped = await CommandHandler.getInstance().getCommandsGrouped();
 
             if (!validateParameter(commandsGrouped, 'fun', params)) {
                 return;
@@ -32,7 +32,7 @@ export class Pat implements Interface.ICommand {
     }
 
     public async getCommands(): Promise<Interface.ICommands> {
-        const images = await Commands.getInstance().getImages();
+        const images = await CommandHandler.getInstance().getImages();
 
         this.commandDetails = [{
             command: 'pat',

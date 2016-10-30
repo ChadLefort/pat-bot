@@ -3,16 +3,49 @@ import * as Interface from '../interfaces';
 import Config from './config';
 import InstanceLoader from './instance-loader';
 import * as aws from 'aws-sdk';
+import * as Discord from 'discord.js';
 import * as glob from 'glob';
 import * as _ from 'lodash';
 
-export default class Commands {
-    private static instance: Commands;
+export default class CommandHandler {
+    private static instance: CommandHandler;
     private prefix = Config.getInstance().prefix;
     private logger = Config.getInstance().logger;
 
-    public static getInstance(): Commands {
-        return this.instance || (this.instance = new Commands());
+    public static getInstance(): CommandHandler {
+        return this.instance || (this.instance = new CommandHandler());
+    }
+
+    public async handleCommand(msg: Discord.Message): Promise<void> {
+        if (!msg.content.startsWith(this.prefix) || msg.author.bot) {
+            return;
+        }
+
+        msg.content = msg.content.toLowerCase();
+        const processedCommand = await this.processCommand(msg.content);
+
+        if (!processedCommand.command) {
+            return;
+        }
+
+        const params: Interface.ICommandParameters = {
+            msg,
+            processedCommand,
+        };
+
+        InstanceLoader.getInstance<Interface.ICommand>(processedCommand.className).execute(params);
+    }
+
+    private async processCommand(msg: string): Promise<Interface.IProssedCommand> {
+        const [command, ...parameter] = _.chain(msg).replace('!', '').split(' ').value();
+        const parameterJoin = _.join(parameter, ' ');
+        const mainCommand = _.find(await this.getMainCommands(), { command });
+
+        return {
+            className: getClassName(command),
+            command: !_.isUndefined(mainCommand) ? mainCommand.command : undefined,
+            parameter: _.isEmpty(parameterJoin) ? null : parameterJoin,
+        };
     }
 
     public async getCommandsGrouped(): Promise<Array<Interface.ICommands>> {
@@ -98,12 +131,3 @@ export default class Commands {
         });
     }
 }
-
-export { Pat } from './commands/fun/pat';
-export { Wow } from './commands/fun/wow';
-export { Help } from './commands/help/help';
-export { Gif } from './commands/search/gif';
-export { Wiki } from './commands/search/wiki';
-export { Youtube } from './commands/search/youtube';
-export { Bot } from './commands/info/bot';
-export { Roll } from './commands/other/roll';

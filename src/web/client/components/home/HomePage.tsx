@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Col, Grid, Jumbotron, Row } from 'react-bootstrap';
 
-
 class HomePage extends React.Component<any, any> {
     public render() {
         return (

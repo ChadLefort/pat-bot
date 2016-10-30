@@ -1,6 +1,6 @@
 import { validateParameter } from '../../../helpers';
 import * as Interface from '../../../interfaces';
-import Commands from '../../models/../commands';
+import CommandHandler from '../../models/../command-handler';
 import Config from '../../models/../config';
 import * as _ from 'lodash';
 
@@ -15,7 +15,7 @@ export class Help implements Interface.ICommand {
 
     public async execute(params: Interface.ICommandParameters): Promise<void> {
         try {
-            const commandsGrouped = await Commands.getInstance().getCommandsGrouped();
+            const commandsGrouped = await CommandHandler.getInstance().getCommandsGrouped();
             let filtered = _.filter(commandsGrouped, { category: params.processedCommand.parameter });
 
             if (!validateParameter(commandsGrouped, 'help', params)) {
@@ -39,7 +39,7 @@ export class Help implements Interface.ICommand {
     }
 
     public async getCommands(): Promise<Interface.ICommands> {
-        const mainCommands = await Commands.getInstance().getMainCommands();
+        const mainCommands = await CommandHandler.getInstance().getMainCommands();
 
         this.commandDetails = [{
             command: 'help',

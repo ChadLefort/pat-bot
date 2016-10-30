@@ -1,6 +1,6 @@
 import { validateParameter } from '../../../helpers';
 import * as Interface from '../../../interfaces';
-import Commands from '../../commands';
+import CommandHandler from '../../command-handler';
 import Config from '../../models/../config';
 import * as moment from 'moment';
 
@@ -15,7 +15,7 @@ export class Bot implements Interface.ICommand {
 
     public async execute(params: Interface.ICommandParameters): Promise<void> {
         try {
-            const commandsGrouped = await Commands.getInstance().getCommandsGrouped();
+            const commandsGrouped = await CommandHandler.getInstance().getCommandsGrouped();
 
             if (!validateParameter(commandsGrouped, 'info', params)) {
                 return;

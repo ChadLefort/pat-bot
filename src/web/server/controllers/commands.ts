@@ -1,4 +1,4 @@
-import Commands from '../../../bot/models/commands';
+import CommandHandler from '../../../bot/models/command-handler';
 import { Request, Response } from 'express';
 import { Controller, Get, Req, Res } from 'giuseppe';
 
@@ -7,6 +7,6 @@ class IndexController {
 
     @Get()
     public commands( @Req() req: Request, @Res() res: Response) {
-        Commands.getInstance().getCommandsGrouped().then(commands => res.json(commands));
+        CommandHandler.getInstance().getCommandsGrouped().then(commands => res.json(commands));
     }
 }
