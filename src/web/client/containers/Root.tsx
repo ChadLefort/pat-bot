@@ -1,11 +1,16 @@
+import CommandsStore from '../stores/CommandsStore';
 import routes from './../routes';
-import store from './../store';
+import { useStrict } from 'mobx';
+import { Provider } from 'mobx-react';
 import * as React from 'react';
-import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 
-class Root extends React.Component<any, any> {
-    public render() {
+useStrict(true);
+
+const store = new CommandsStore();
+
+export default class Root extends React.Component<any, any> {
+    public render(): JSX.Element {
         return (
             <Provider store={store}>
                 <Router history={browserHistory} routes={routes} />
@@ -13,5 +18,3 @@ class Root extends React.Component<any, any> {
         );
     }
 }
-
-export default Root;
