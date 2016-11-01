@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { Controller, Get, Req, Res } from 'giuseppe';
 
 @Controller('commands')
-class IndexController {
+export class CommandsController {
 
     @Get()
     public commands( @Req() req: Request, @Res() res: Response) {

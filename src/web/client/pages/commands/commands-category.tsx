@@ -1,5 +1,5 @@
 import * as Interface from '../../../../bot/interfaces/commands';
-import CommandsRow from './CommandsRow';
+import CommandsRow from './commands-row';
 import * as React from 'react';
 
 interface ICommandsCategoryProps {

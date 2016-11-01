@@ -1,5 +1,5 @@
 import * as Interface from '../../../../bot/interfaces/commands';
-import CommandsCategory from './CommandsCategory';
+import CommandsCategory from './commands-category';
 import * as React from 'react';
 
 interface ICommandsGridProps {

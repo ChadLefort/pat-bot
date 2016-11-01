@@ -1,13 +1,13 @@
-import Header from './common/Header';
+import Header from './header';
 import DevTools from 'mobx-react-devtools';
 import * as React from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
 
-interface IAppProps {
+interface ILayoutProps {
     children: Object;
 }
 
-export default class App extends React.Component<IAppProps, any> {
+export default class Layout extends React.Component<ILayoutProps, any> {
     public render(): JSX.Element {
         return (
             <div>

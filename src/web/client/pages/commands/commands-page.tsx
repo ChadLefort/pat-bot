@@ -1,5 +1,6 @@
-import CommandsStore from '../../stores/CommandsStore';
-import CommandsGrid from './CommandsGrid';
+import CommandsStore from '../../stores/commands-store';
+import { IStores } from '../../types';
+import CommandsGrid from './commands-grid';
 import { inject, observer } from 'mobx-react';
 import * as React from 'react';
 
@@ -7,7 +8,7 @@ interface ICommandsPageProps {
     store: CommandsStore;
 }
 
-@inject('store')
+@inject((stores: IStores): ICommandsPageProps => ({ store: stores.commandsStore }))
 @observer
 export default class CommandsPage extends React.Component<ICommandsPageProps, any> {
 
