@@ -1,3 +1,3 @@
-import Config from './models/config';
+import Config from './config';
 
 Config.getInstance().startPM2();

@@ -1,6 +1,6 @@
-import { ICommandParameters, ICommands } from './interfaces';
-import CommandHandler from './models/command-handler';
-import Config from './models/config';
+import { ICommandParameters, ICommands } from '../interfaces';
+import CommandHandler from './command-handler';
+import Config from './config';
 import * as _ from 'lodash';
 
 export async function getImage(params: ICommandParameters): Promise<void> {

@@ -1,7 +1,7 @@
-import { validateParameter } from '../../../helpers';
 import * as Interface from '../../../interfaces';
 import CommandHandler from '../../command-handler';
-import Config from '../../models/../config';
+import Config from '../../config';
+import { validateParameter } from '../../helpers';
 import * as moment from 'moment';
 
 export class Bot implements Interface.ICommand {

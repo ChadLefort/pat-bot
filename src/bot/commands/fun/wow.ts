@@ -1,7 +1,7 @@
-import { getImage, validateParameter } from '../../../helpers';
 import * as Interface from '../../../interfaces';
 import CommandHandler from '../../command-handler';
 import Config from '../../config';
+import { getImage, validateParameter } from '../../helpers';
 import * as _ from 'lodash';
 
 export class Wow implements Interface.ICommand {

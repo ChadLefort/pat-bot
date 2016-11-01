@@ -1,5 +1,5 @@
-import Config from './models/config';
-import PatBot from './models/pat-bot';
+import Config from './config';
+import PatBot from './pat-bot';
 
 try {
     const patBot = new PatBot(Config.getInstance().token);

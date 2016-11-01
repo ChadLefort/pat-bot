@@ -1,4 +1,4 @@
-import * as Interface from '../../../../bot/interfaces/commands';
+import * as Interface from '../../../../interfaces/commands';
 import CommandsCategory from './commands-category';
 import * as React from 'react';
 

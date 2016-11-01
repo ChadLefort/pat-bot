@@ -1,4 +1,4 @@
-import CommandHandler from '../../../bot/models/command-handler';
+import CommandHandler from '../../../bot/command-handler';
 import { Request, Response } from 'express';
 import { Controller, Get, Req, Res } from 'giuseppe';
 

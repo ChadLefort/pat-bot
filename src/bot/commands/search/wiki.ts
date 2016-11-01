@@ -1,6 +1,6 @@
 import * as Interface from '../../../interfaces';
 import Config from '../../config';
-import * as wiki from 'wikijs';
+import wiki from 'wikijs';
 
 export class Wiki implements Interface.ICommand {
     private static instance: Wiki;
@@ -13,8 +13,8 @@ export class Wiki implements Interface.ICommand {
 
     public async execute(params: Interface.ICommandParameters): Promise<void> {
         try {
-            const data = await wiki.default().search(params.processedCommand.parameter, 1);
-            const page = await wiki.default().page(data.results[0]);
+            const data = await wiki().search(params.processedCommand.parameter, 1);
+            const page = await wiki().page(data.results[0]);
             const summary = await page.summary();
             let trimmedSummary = summary.substr(0, 1500);
 

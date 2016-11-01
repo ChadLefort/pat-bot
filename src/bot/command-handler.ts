@@ -1,6 +1,6 @@
-import { getClassName } from '../helpers';
 import * as Interface from '../interfaces';
 import Config from './config';
+import { getClassName } from './helpers';
 import InstanceLoader from './instance-loader';
 import * as aws from 'aws-sdk';
 import * as Discord from 'discord.js';
@@ -80,7 +80,7 @@ export default class CommandHandler {
 
     public getMainCommands(): Promise<Array<Interface.ICommandAndCategory>> {
         return new Promise((resolve, reject) => {
-            glob('**/*.ts', { cwd: './src/bot/models/commands/' }, (error, files) => {
+            glob('**/*.ts', { cwd: './src/bot/commands/' }, (error, files) => {
                 let mainCommands: Array<Interface.ICommandAndCategory> = [];
 
                 _.forEach(files, file => {

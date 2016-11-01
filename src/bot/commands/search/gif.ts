@@ -1,6 +1,6 @@
 import * as Interface from '../../../interfaces';
 import Config from '../../config';
-import * as request from 'request-promise';
+import * as request from 'axios';
 
 export class Gif implements Interface.ICommand {
     private static instance: Gif;
@@ -13,19 +13,17 @@ export class Gif implements Interface.ICommand {
 
     public async execute(params: Interface.ICommandParameters): Promise<void> {
         try {
-            const options = {
-                json: true,
-                qs: {
-                    api_key: process.env.GIPHY_KEY,
-                    format: 'json',
-                    limit: 1,
-                    rating: 'r',
-                    tag: params.processedCommand.parameter,
-                },
-                url: `http://api.giphy.com/v1/gifs/random`,
+            const requestParams = {
+                api_key: process.env.GIPHY_KEY,
+                format: 'json',
+                limit: 1,
+                rating: 'r',
+                tag: params.processedCommand.parameter,
             };
-            let results: Interface.IGiphy = await request(options);
-            params.msg.channel.sendFile(results.data.image_original_url);
+            const { data } = await request.get('http://api.giphy.com/v1/gifs/random', { params: requestParams });
+            const giphy = <Interface.IGiphy>data;
+
+            params.msg.channel.sendFile(giphy.data.image_original_url);
         } catch (error) {
             this.logger.error(error);
         }
