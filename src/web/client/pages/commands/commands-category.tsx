@@ -10,7 +10,7 @@ interface ICommandsCategoryProps {
 const CommandsCategory = (props: ICommandsCategoryProps): JSX.Element => {
     return (
         <div>
-            <h3>{props.header}</h3>
+            <h3 className="command-category">{props.header}</h3>
             <CommandsRow details={props.details} />
         </div>
     );

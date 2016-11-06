@@ -1,6 +1,6 @@
 import './_header.scss';
 import * as React from 'react';
-import { Col, Grid, Jumbotron, Nav, NavItem, Navbar, Row } from 'react-bootstrap';
+import { Col, Grid, Image, Jumbotron, Nav, NavItem, Navbar, Row } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { IndexLinkContainer, LinkContainer } from 'react-router-bootstrap';
 
@@ -27,7 +27,7 @@ const Header = (): JSX.Element => {
                 <Grid>
                     <Row>
                         <Col md={12}>
-                            <p className="text-center">Pat Bot</p>
+                            <Image src="https://s3.amazonaws.com/pat-bot/pat-bot_banner.png" className="center-block" responsive />
                         </Col>
                     </Row>
                 </Grid>

@@ -38,6 +38,14 @@
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/lib/web",
             "localRoot": "${workspaceRoot}/src/web"
+        },
+        {
+            "name": "CHROME",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true
         }
     ]
 }

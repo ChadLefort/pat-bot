@@ -68,6 +68,7 @@
     ],
     "no-string-literal": false,
     "object-literal-sort-keys": false,
-    "no-var-requires": false
+    "no-var-requires": false,
+    "jsx-no-multiline-js": false
   }
 }
