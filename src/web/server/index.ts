@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
     const webpack = require('webpack');
     const devServer = require('webpack-dev-middleware');
     const hotServer = require('webpack-hot-middleware');
-    const webpackConfig = require('../../../webpack/webpack.config.js');
+    const webpackConfig = require('../../../webpack.config.js');
     const compiler = webpack(webpackConfig);
 
     app.use(devServer(compiler, {
@@ -28,12 +28,11 @@ if (process.env.NODE_ENV === 'development') {
         log: console.log,
     }));
 } else {
-    // TODO: Fix this issue.
     app.use('/public', express.static(path.join(__dirname, '../public')));
 }
 
 app.use(registerControllers('/api'));
-app.set('port', '1337' || process.env.PORT);
+app.set('port', process.env.DEV_PORT || '1337');
 
 const listener = app.listen(app.get('port'), () => {
     console.log('Express server listening on port ' + listener.address().port);

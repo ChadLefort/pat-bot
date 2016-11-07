@@ -1,5 +1,4 @@
 import Header from './header';
-import DevTools from 'mobx-react-devtools';
 import * as React from 'react';
 import { Col, Grid, Row } from 'react-bootstrap';
 
@@ -8,6 +7,13 @@ interface ILayoutProps {
 }
 
 export default class Layout extends React.Component<ILayoutProps, any> {
+    private devTools(): JSX.Element {
+        if (process.env.NODE_ENV === 'development') {
+            const DevTools = require('mobx-react-devtools').default;
+            return (<DevTools />);
+        }
+    }
+
     public render(): JSX.Element {
         return (
             <div>
@@ -19,7 +25,7 @@ export default class Layout extends React.Component<ILayoutProps, any> {
                         </Col>
                     </Row>
                 </Grid>
-                <DevTools />
+                {this.devTools()}
             </div>
         );
     }

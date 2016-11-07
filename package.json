@@ -14,11 +14,11 @@
   ],
   "scripts": {
     "clean": "rimraf lib",
-    "deploy": "tsc --pretty && webpack --config ./webpack/webpack.prod.config.js && npm run views && node lib/bot/pm2.js",
+    "deploy": "tsc --pretty && webpack --config webpack.production.config.js && npm run assets && npm run views && node lib/bot/pm2.js",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "assets": "ncp src/web/assets lib/web/public/assets",
     "views": "mkdirp lib/web/server/views && ncp src/web/server/views lib/web/server/views",
-    "build": "npm run clean && npm run lint && webpack --config ./webpack/webpack.config.js && npm run assets & npm run views && echo Using TypeScript && tsc --version && tsc --pretty",
+    "build": "npm run clean && npm run lint && webpack && npm run assets && npm run views && echo Using TypeScript && tsc --version && tsc --pretty",
     "test": "npm run build && mocha --compilers ts:ts-node/register --recursive test/**/*-spec.ts",
     "develop": "nf start -j Procfile-dev",
     "watch": "npm run build -- --watch",

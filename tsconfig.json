@@ -14,7 +14,12 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "jsx": "react"
+    "jsx": "react",
+    "lib": [
+      "es5",
+      "es6",
+      "dom"
+    ]
   },
   "awesomeTypescriptLoaderOptions": {
     "target": "es5"

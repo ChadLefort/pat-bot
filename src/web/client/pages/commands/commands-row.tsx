@@ -18,8 +18,8 @@ const CommandsRow = (props: ICommandsRowProps): JSX.Element => {
             </thead>
             <tbody>
                 {props.details.map((item: any, key: number) =>
-                    <tr>
-                        <td className="col-md-2" key={key}>{item.command}</td>
+                    <tr key={key}>
+                        <td className="col-md-2">{item.command}</td>
                         <td className="col-md-2">{item.parameters}</td>
                         <td className="col-md-8">{item.description}</td>
                     </tr>
