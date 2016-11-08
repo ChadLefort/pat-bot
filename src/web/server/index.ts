@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(registerControllers('/api'));
-app.set('port', process.env.DEV_PORT || '1337');
+app.set('port', process.env.PORT || '1337');
 
 const listener = app.listen(app.get('port'), () => {
     console.log('Express server listening on port ' + listener.address().port);
