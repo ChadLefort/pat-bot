@@ -1,4 +1,4 @@
-import { Roll } from '../../../src/bot/models/commands/other/roll';
+import { Roll } from '../../../src/bot/commands/other/roll';
 import * as chai from 'chai';
 import 'mocha';
 
