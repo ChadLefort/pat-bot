@@ -911,7 +911,7 @@ declare module 'discord.js' {
      * can perform this or not.
      * @returns {Object<string, boolean>}
      */
-    serialize(): {[K:string]: boolean};
+    serialize(): { [K: string]: boolean };
     /**
      * Checks whether the user has a certain permission, e.g. `READ_MESSAGES`.
      * @param {PermissionResolvable} permission The permission to check for
@@ -2375,7 +2375,7 @@ declare module 'discord.js' {
      * // print the serialized role
      * console.log(role.serialize());
      */
-    serialize(): {[K:string]: boolean};
+    serialize(): { [K: string]: boolean };
     /**
      * Checks if the role has a permission.
      * @param {PermissionResolvable} permission The permission to check for

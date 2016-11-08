@@ -5,14 +5,24 @@
       "typings"
     ],
     "target": "es6",
-    "declaration": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "outDir": "./lib",
     "preserveConstEnums": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "jsx": "react",
+    "lib": [
+      "es5",
+      "es6",
+      "dom"
+    ]
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "target": "es5"
   },
   "include": [
     "src/**/*"
@@ -20,5 +30,8 @@
   "exclude": [
     "node_modules",
     "**/*-spec.ts"
+  ],
+  "files": [
+    "./typings/declarations.d.ts"
   ]
 }

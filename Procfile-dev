@@ -1,1 +1,2 @@
-worker: nodemon --debug lib/index.js
+worker: nodemon --debug=5858 lib/bot/index.js
+web: nodemon --debug=6868 lib/web/server/index.js
