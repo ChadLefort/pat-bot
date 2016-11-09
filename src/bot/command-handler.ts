@@ -1,5 +1,5 @@
+import Config from '../config';
 import * as Interface from '../interfaces';
-import Config from './config';
 import { getClassName } from './helpers';
 import InstanceLoader from './instance-loader';
 import * as aws from 'aws-sdk';

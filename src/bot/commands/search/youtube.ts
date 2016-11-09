@@ -1,5 +1,5 @@
+import Config from '../../../config';
 import * as Interface from '../../../interfaces';
-import Config from '../../config';
 import * as bluebird from 'bluebird';
 import * as YouTube from 'youtube-node';
 

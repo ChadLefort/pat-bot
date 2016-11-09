@@ -55,10 +55,8 @@ export default class Config {
                 log_file: `${this.logDir}/pm2.log`,
                 max_memory_restart: maxMemory + 'M',
                 merge_logs: true,
-                name: 'pat-bot:bot',
+                name: 'bot',
                 script: 'lib/bot/index.js',
-            }, () => {
-                pm2.interact(process.env.KEYMETRICS_PRIVATE, process.env.KEYMETRICS_PUBLIC, 'dokku');
             });
 
             pm2.start({
@@ -68,9 +66,11 @@ export default class Config {
                 log_file: `${this.logDir}/pm2.log`,
                 max_memory_restart: maxMemory + 'M',
                 merge_logs: true,
-                name: 'pat-bot:web',
+                name: 'web',
                 script: 'lib/web/server/index.js',
             });
+
+            pm2.interact(process.env.KEYMETRICS_PRIVATE, process.env.KEYMETRICS_PUBLIC, 'dokku');
         });
     }
 

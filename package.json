@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "clean": "rimraf lib",
-    "deploy": "tsc --pretty && webpack --config webpack.production.config.js && npm run assets && npm run views && node lib/bot/pm2.js",
+    "deploy": "tsc --pretty && webpack --config webpack.production.config.js && npm run assets && npm run views && node lib/pm2.js",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "assets": "ncp src/web/assets lib/web/public/assets",
     "views": "mkdirp lib/web/server/views && ncp src/web/server/views lib/web/server/views",
