@@ -1,5 +1,5 @@
-import Config from '../../../src/bot/config';
 import PatBot from '../../../src/bot/pat-bot';
+import Config from '../../../src/config';
 import * as chai from 'chai';
 import 'mocha';
 
