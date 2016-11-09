@@ -1,6 +1,6 @@
 {
   "name": "pat-bot",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A silly Discord bot named after my cat.",
   "license": "MIT",
   "repository": "https://github.com/ChadLefort/pat-bot.git",
