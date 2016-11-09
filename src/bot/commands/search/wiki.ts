@@ -1,5 +1,5 @@
+import Config from '../../../config';
 import * as Interface from '../../../interfaces';
-import Config from '../../config';
 import wiki from 'wikijs';
 
 export class Wiki implements Interface.ICommand {

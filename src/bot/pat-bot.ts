@@ -1,5 +1,5 @@
+import Config from '../config';
 import CommandHandler from './command-handler';
-import Config from './config';
 import * as Discord from 'discord.js';
 
 export default class PatBot {

@@ -1,5 +1,5 @@
+import Config from '../../../config';
 import * as Interface from '../../../interfaces';
-import Config from '../../config';
 import * as _ from 'lodash';
 
 export class Roll implements Interface.ICommand {
