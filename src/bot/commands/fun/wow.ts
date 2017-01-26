@@ -23,7 +23,7 @@ export class Wow implements Interface.ICommand {
 
             if (params.processedCommand.parameter === 'citizens') {
                 if (params.msg.channel.type === 'text') {
-                    params.msg.channel.sendMessage(this.citizens(params.msg.guild.name), { disable_everyone: false });
+                    params.msg.channel.sendMessage(this.citizens(params.msg.guild.name), { disableEveryone: false });
                 } else {
                     params.msg.channel.sendMessage('Message can only be sent in a guild text channel.');
                 }

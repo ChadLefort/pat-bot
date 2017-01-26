@@ -20,7 +20,7 @@ export class Roll implements Interface.ICommand {
                 maxRoll = parameter;
             }
 
-            params.msg.channel.sendMessage(_.random(1, maxRoll));
+            params.msg.channel.sendMessage(_.random(1, maxRoll).toString());
         } catch (error) {
             this.logger.error(error);
         }
